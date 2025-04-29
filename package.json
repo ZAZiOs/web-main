@@ -23,6 +23,7 @@
 	"license": "MIT",
 	"dependencies": {
 		"@auth/sveltekit": "^0.11.0",
+		"@sveltejs/adapter-vercel": "^5.7.0",
 		"axios": "^1.6.7",
 		"markdown": "^0.5.0",
 		"svelte-time": "^0.8.2"
