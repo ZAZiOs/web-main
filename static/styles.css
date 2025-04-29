@@ -1,0 +1,151 @@
+@font-face {
+    font-family: 'Better VCR';
+    src: url('/better-vcr-5.4.ttf') format('truetype'); /* Chrome 4+, Firefox 3.5, Opera 10+, Safari 3—5 */
+}  
+
+@font-face {
+    font-family: 'Minecraft';
+    src: url('/Minecraft.otf') format('opentype'); /* Chrome 4+, Firefox 3.5, Opera 10+, Safari 3—5 */
+}  
+ 
+
+mc {
+    font-family: 'Minecraft';
+    vertical-align: text-top;
+}
+
+vcr {
+    font-family: 'Better VCR';
+    font-size: 18px;
+    vertical-align: text-top;
+}
+
+phrase {
+    padding-left: 10px;
+    padding-bottom: 3px;
+	image-rendering: pixelated;
+    font-size: 16px;
+    color: #ffffffaa;
+}
+
+phrase::before {
+    content: '>';
+    padding-right: 10px
+}
+
+body {
+    background-color: #1a0052;
+    font-size: 18px;
+    font-family: 'Minecraft';
+}
+
+h1 {
+    font-family: 'Better VCR';
+    padding-bottom: 4px;
+    margin-bottom: 2px;
+    border-bottom: solid 4px #dee2e6;
+}
+
+hr {
+    border: 0;
+    border-top: 4px rgb(128, 128, 128) solid;
+    opacity: 1;
+}
+
+.top {
+    background-color: var(--bs-secondary-bg-subtle);
+    display: flex;
+    justify-content: space-between;
+    color: white;
+}
+
+.top a {
+    color: white;
+
+}
+
+a {
+    text-decoration: none;
+}
+
+.header-img {
+    width: 100%;
+	image-rendering: pixelated;
+    height: auto;
+}
+
+.main {
+    background-color: #280080;
+    border: 1px solid #4600dd;
+    border-top: 0;
+}
+
+.right-column {
+    width: 45%;
+}
+
+.nav-tabs {
+    background-color: #3400a4;
+    --bs-border-color: #4600dd;
+    --bs-secondary-bg: #ffffff30;
+    --bs-nav-tabs-link-active-bg: #280080;
+    --bs-nav-tabs-link-active-border-color: var(--bs-border-color) var(--bs-border-color) #280080;
+}
+
+.nav-link:focus, .nav-link:hover {
+    background-color: #ffffff15;
+}
+
+.nav-item {
+    padding-right: .3rem;
+}
+
+@media (max-width: 768px)
+{
+.nav-tabs {
+    padding-right: .5rem !important;
+    padding-left: .5rem !important;
+}
+.nav-item {
+    display: block;
+    width: 100%;
+    /*just BREAKES.*/
+}
+.nav-tabs .nav-link {
+    margin-bottom: .5rem;
+    border: var(--bs-nav-tabs-border-width) solid transparent;
+    border-radius: var(--bs-nav-tabs-border-radius);
+}
+.nav-tabs .nav-item.show .nav-link, .nav-tabs .nav-link.active {
+    color: var(--bs-nav-tabs-link-active-color);
+    background-color: var(--bs-nav-tabs-link-active-bg);
+    border-color: var(--bs-border-color);
+}
+.main {
+    flex-direction: column-reverse;
+}
+.right-column {
+    width: unset;
+}
+.time {
+    display: none
+}
+.mobiles {
+    flex-direction: column-reverse;
+}
+.img-projects {
+    border-top: white 4px solid;
+    padding-top: 1.3rem;
+    margin-bottom: .5rem;
+    margin-left: 0 !important;
+    width: 100% !important;
+}
+}
+
+.img-projects {
+    width: 250px;
+    margin-left: 20px;
+}
+.mobiles {
+    display: flex;
+}
