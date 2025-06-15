@@ -16,8 +16,6 @@
         <div>
         <h1><a href="https://github.com/ZAZiOs/MediaHoster">MediaHoster</a></h1>
         Simple and convenient media hosting site (for pictures, videos and GIFs) with <a href="https://github.com/ZAZiOs/MediaHoster">open source code</a><br>
-        You can find an active instance, not administered by me, at <a href="http://piss.sdzk.xyz/">piss.sdzk.xyz</a>.<br>
-        <small>Access password: <code><mc>blackniggersex<mc></code></small>
         </div>
     </div>
     <div>
