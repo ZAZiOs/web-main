@@ -21,8 +21,6 @@ import Layout from '$lib/ru-lyt.svelte'
         <div>
         <h1><a href="https://github.com/ZAZiOs/MediaHoster">MediaHoster</a></h1>
         Простейший и удобный хостинг для картинок, видео и гифок с <a href="https://github.com/ZAZiOs/MediaHoster">открытым исходным кодом</a><br>
-        Активную инстанцию, администрируемую не мной, вы можете найти по адресу <a href="http://piss.sdzk.xyz/">piss.sdzk.xyz</a>.<br>
-        <small>Пароль для доступа: <code><mc>blackniggersex<mc></code></small>
         </div>
     </div>
     <div>
