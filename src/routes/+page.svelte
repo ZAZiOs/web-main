@@ -212,17 +212,24 @@
 #desktop-mobile {
 	position: relative;
     display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 10px;
 	width: 100%;
-	max-width: 1000px;
-	height: 100vh;
+	min-height: 100vh;
 	margin: 0 auto;
+    z-index: 10
 }
 
 /* Поверхность окна */
-.window {
+.window:not(.mobile) {
 	position: absolute;
 	overflow: hidden;
 	user-select: none;
+}
+
+.window-body {
+    overflow-y: auto;
 }
 
 /* Тело окна в стиле Win7 */
@@ -316,11 +323,16 @@
 }
 
 .desktop-icon .text {
-    color: #000;
+    color: #fff;
     display: block;
     width: 100%;
     text-align: center;
-    text-shadow: 0 0 10px #fff, 0 0 10px #fff, 0 0 10px #fff, 0 0 10px #fff, 0 0 10px #fff, 0 0 10px #fff, 0 0 10px #fff, 0 0 10px #fff;
+    --spread: 4px;
+    text-shadow:
+        1px 1px var(--spread) #000,
+        1px 1px var(--spread) #000,
+        1px 1px var(--spread) #000,
+        1px 1px var(--spread) #000;
 }
 
 
@@ -338,6 +350,25 @@
 </div>
 {/if}
 
+{#if isMobile}
+<div id="desktop-mobile">
+	{#each windows as win}
+		<div
+			class="window glass mobile"
+			id={"win" + win.id}
+			style=""
+		>
+			<div class="title-bar">
+				<div class="title-bar-text">{win.title}</div>
+			</div>
+			<div class="window-body" style="height: calc(100% - 35px);">
+                <WindowContents id={win.id} {isMobile} {selectedProject}></WindowContents>
+			</div>
+		</div>
+	{/each}
+</div>
+{:else}
+
 <div class="desktop-icons">
     {#each desktopIcons as icon}
         <!-- svelte-ignore a11y-click-events-have-key-events -->
@@ -348,28 +379,9 @@
     {/each}
 </div>
 
-{#if isMobile}
-    <div id="desktop-mobile">
-	{#each windows as win}
-		<div
-			class="window glass"
-			id={"win" + win.id}
-			style="
-                width: 90%;
-                height: fit-content;
-			"
-		>
-			<div class="title-bar" on:mousedown={(e) => startDrag(e, win)}>
-				<div class="title-bar-text">{win.title}</div>
-			</div>
-			<div class="window-body" style="height: calc(100% - 35px);">
-                <WindowContents id={win.id} {isMobile} {selectedProject}></WindowContents>
-			</div>
-		</div>
-	{/each}
-</div>
-{:else}
-<div id="desktop">
+<!-- svelte-ignore a11y-no-static-element-interactions -->
+<!-- svelte-ignore a11y-click-events-have-key-events -->
+<div id="desktop" on:click={() => activeIcon = null}>
 	{#each initWindows as win}
         {#if openedWindows.includes(win.id)}
 		<!-- svelte-ignore a11y-interactive-supports-focus -->
@@ -402,7 +414,7 @@
                     </div>
                 {/if}
 			</div>
-			<div class="window-body" style="height: calc(100% - 35px);">
+			<div class="window-body has-scrollbar" style="height: calc(100% - 35px);">
 				<WindowContents id={win.id} {isMobile} {selectedProject}></WindowContents>
 			</div>
 		</div>

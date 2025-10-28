@@ -10,8 +10,30 @@
     <p>Немного информации обо мне.</p>
 {:else if id === 3}
     {#if selectedProject === 'questbench'}
+        <div>
         <h3>Проект: QuestBench</h3>
         <p>Описание проекта QuestBench...</p>
+        <h3>Проект: QuestBench</h3>
+        <p>Описание проекта QuestBench...</p>
+        <h3>Проект: QuestBench</h3>
+        <p>Описание проекта QuestBench...</p>
+        <h3>Проект: QuestBench</h3>
+        <p>Описание проекта QuestBench...</p>
+        <h3>Проект: QuestBench</h3>
+        <p>Описание проекта QuestBench...</p>
+
+                <h3>Проект: QuestBench</h3>
+        <p>Описание проекта QuestBench...</p>
+        <h3>Проект: QuestBench</h3>
+        <p>Описание проекта QuestBench...</p>        <h3>Проект: QuestBench</h3>
+        <p>Описание проекта QuestBench...</p>
+        <h3>Проект: QuestBench</h3>
+        <p>Описание проекта QuestBench...</p>
+        <h3>Проект: QuestBench</h3>
+        <p>Описание проекта QuestBench...</p>
+        <h3>Проект: QuestBench</h3>
+        <p>Описание проекта QuestBench...</p>
+    </div>
     {:else if selectedProject === 'projectX'}
         <h3>Проект: Project X</h3>
         <p>Описание проекта Project X...</p>
