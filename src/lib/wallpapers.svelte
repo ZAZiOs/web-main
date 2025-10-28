@@ -11,6 +11,15 @@
     let timeoutID = 0;
     let intervalID = 0;
 
+    let wallpapers = [
+      {link: "/wp/win7-1.jpg", color: "#7f45c4"},
+      {link: "/wp/win7-2.jpg", color: "#58c1d5"},
+      {link: "/wp/win7-3.jpg", color: "#4580c4"},
+      {link: "/wp/win7-4.jpg", color: "#bb544bc4"},
+      {link: "/wp/win7-5.jpg", color: "#2ea778"},
+      {link: "/wp/win7-6.jpg", color: "#c44553"}
+    ]
+
     let isTransitioning = false;
     function getWallpaperIndex() {
         const now = new Date();
@@ -19,8 +28,9 @@
     }
 
     function changeWP() {
+        if (!browser) return
         const newIndex = getWallpaperIndex();
-        const newWP = wp_template.replace("%s", String(newIndex + 1));
+        const newWP = wallpapers[newIndex].link;
         if (newWP !== current_wp) {
             next_wp = newWP;
             isTransitioning = true;
@@ -30,6 +40,7 @@
                 isTransitioning = false;
             }, change_time);
         }
+        document.documentElement.style.setProperty('--w7-w-bg', wallpapers[newIndex].color);
     }
 
     function getTimeUntilNextMinute() {
@@ -40,8 +51,9 @@
 
     function initTimers() {
         // Устанавливаем начальную обоину
-        current_wp = wp_template.replace("%s", String(getWallpaperIndex() + 1));
-        
+        let wp = wallpapers[getWallpaperIndex()]
+        current_wp = wp.link;
+        document.documentElement.style.setProperty('--w7-w-bg', wp.color);
         // Запускаем первый таймаут на начало следующей минуты
         timeoutID = setTimeout(() => {
             changeWP(); // Сразу меняем на следующую минуту
@@ -77,6 +89,9 @@
 
 
 <style>
+  :global(.window) {
+    transition: background-color 1s linear;
+  }
   .wallpaper-container {
     position: fixed;
     top: 0;

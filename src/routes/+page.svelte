@@ -23,13 +23,13 @@
         { id: 2, title: "Обо мне", top: "2%", left: "30%", width: "70%", height: "47%" },
 		{ id: 1, title: "Мои проекты", top: "2%", left: 0, width: "29%", height: "47%" },
 		{ id: 3, title: "*Выбранный проект*", top: "50%", left: 0, width: "69%", height: "47%" },
-		{ id: 4, title: "Мои контакты", top: "50%", left: "70%", width: "30%", height: "47%" },
+		{ id: 4, title: "Мои друзья", top: "50%", left: "70%", width: "30%", height: "47%" },
 	];
 
     const desktopIcons = [
         {id: 1, title: "Мои проекты", icon: "/icons/folder-icon.ico"},
         {id: 2, title: "Обо мне", icon: "/icons/system-icon.ico"},
-        {id: 4, title: "Мои контакты", icon: "/icons/mail-icon.ico"},
+        {id: 4, title: "Мои друзья", icon: "/icons/friends-icon.ico"},
     ]
     let activeIcon = null;
 
@@ -62,15 +62,18 @@
     });
 
 
-    let openedWindows = initWindows.map(win => win.id);
+    let openedWindows = [];
 
-    function moveWindowOnTop(e, win) {
+    async function moveWindowOnTop(e, win) {
+        if (!browser) return;
+        await new Promise(resolve => setTimeout(resolve, 100))
         const el = document.getElementById("win" + win.id);
         el.style.zIndex = zIndexCounter++;
         lastActiveWindowId = win.id;
     }
 
 	function startDrag(e, win) {
+        if (!browser) return;
         activeWindow = win;
         lastActiveWindowId = win.id;
         const el = document.getElementById("win" + win.id);
@@ -114,6 +117,7 @@
     function onResize() {
         isMobile = window.innerWidth <= 768;
         if (isMobile) return;
+        if (!browser) return;
         const desktop = document.querySelector(".layout-content");
         if (!desktop) return;
         const desktopRect = desktop.getBoundingClientRect();
@@ -182,7 +186,6 @@
             moveWindowOnTop(null, {id})
             return
         }
-        console.log(id)
         openedWindows = [...openedWindows, id];
         moveWindowOnTop(null, {id})
     }
@@ -191,6 +194,14 @@
         window.addEventListener("resize", onResize);
     }
 
+    async function start() {
+        for await (let win of initWindows) {
+            await new Promise(resolve => setTimeout(resolve, 100))
+            openWindow(win.id)
+        }
+    }
+
+    start()
 
 
     let selectedProject = 'questbench';
