@@ -21,9 +21,10 @@
     // такой странный порядок не по айди из-за того как мобильный лайаут рендерится сверху вниз
 	const windows = [
         { id: 2, title: "Обо мне", top: "2%", left: "30%", width: "70%", height: "47%" },
-		{ id: 1, title: "Мои проекты", top: "2%", left: 0, width: "29%", height: "47%" },
-		{ id: 3, title: "*Выбранный проект*", top: "50%", left: 0, width: "69%", height: "47%" },
+		{ id: 1, title: "Мои проекты", top: "2%", left: "1%", width: "28%", height: "47%" },
+		{ id: 3, title: "*Выбранный проект*", top: "50%", left: "1%", width: "68%", height: "47%" },
 		{ id: 4, title: "Мои друзья", top: "50%", left: "70%", width: "30%", height: "47%" },
+        { id: 5, title: "Справка", top: "25%", left: "30%", width: "39%", height: "50%" },
 	];
 
     const desktopIcons = [
@@ -130,7 +131,7 @@
         if (resizeTimeout) clearTimeout(resizeTimeout);
         resizeTimeout = setTimeout(() => {
             resizeTimeout = null;
-        }, 1000);
+        }, 1200);
 
         windows.forEach(win => {
             const el = document.getElementById("win" + win.id);
@@ -196,6 +197,7 @@
 
     async function start() {
         for await (let win of initWindows) {
+            if (win.id === 5) continue;
             await new Promise(resolve => setTimeout(resolve, 100))
             openWindow(win.id)
         }
@@ -254,7 +256,7 @@
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(0, 0, 0, 0.5);
+    background: rgba(0, 0, 0, 0.7);
     z-index: 10000;
 }
 
@@ -355,7 +357,7 @@
         <img src="/corner-arrow.svg" class="arrow top">
         <img src="/corner-arrow.svg" class="arrow bottom">
         <div class="message">
-            <p>Размер окна изменён, окна сброшены.</p>
+            <p>Размер окна браузера изменён. Окошки на странице сброшены</p>
         </div>
     </div>
 </div>
@@ -368,12 +370,13 @@
 			class="window glass mobile"
 			id={"win" + win.id}
 			style=""
+            in:fadeZoom={{duration: 200, direction: 'in'}}
 		>
 			<div class="title-bar">
 				<div class="title-bar-text">{win.title}</div>
 			</div>
 			<div class="window-body" style="height: calc(100% - 35px);">
-                <WindowContents id={win.id} {isMobile} {selectedProject}></WindowContents>
+                <WindowContents id={win.id} {isMobile} bind:selectedProject></WindowContents>
 			</div>
 		</div>
 	{/each}
@@ -426,7 +429,7 @@
                 {/if}
 			</div>
 			<div class="window-body has-scrollbar" style="height: calc(100% - 35px);">
-				<WindowContents id={win.id} {isMobile} {selectedProject}></WindowContents>
+				<WindowContents id={win.id} {isMobile} bind:selectedProject></WindowContents>
 			</div>
 		</div>
         {/if}

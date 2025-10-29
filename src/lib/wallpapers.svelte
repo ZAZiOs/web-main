@@ -128,6 +128,7 @@
     <div 
       class="wallpaper current"
       style="background-image: url('{current_wp}')"
+      in:fade={{ duration: 1000 }}
     ></div>
   {/if}
   
