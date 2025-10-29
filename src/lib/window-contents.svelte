@@ -1,7 +1,12 @@
 <script>
     import { onMount } from "svelte";
     import { browser } from "$app/environment";
+    import axios from "axios";
     export let id = 0, isMobile = false, selectedProject = 'questbench';
+    
+    // language
+    import { t as trans, changeLanguage } from '$lib/i18n.js';
+    $: t = $trans;
 </script>
 
 
@@ -18,30 +23,19 @@
 <!-- my project selection -->
     <p>Здесь будут отображаться мои проекты.</p>
     <button on:click={() => selectedProject = 'questbench'}>questbench</button>
-    <button on:click={() => selectedProject = 'projectX'}>ProjectX</button>
+    <button on:click={() => selectedProject = 'ovknative'}>OpenVK Native</button>
 {:else if id === 3}
 <!-- selected project -->
-    {#if selectedProject === 'questbench'}
-        <div>
-            <h3>Проект: QuestBench</h3>
-            <p>Описание проекта QuestBench...</p>
-        </div>
-    {:else if selectedProject === 'projectX'}
-        <h3>Проект: Project X</h3>
-        <p>Описание проекта Project X...</p>
-    {:else}
-        <h3>Выбранный проект не найден.</h3>
-    {/if}
-    <p>Детали выбранного проекта.</p>
+    {@html t(`md.${selectedProject}`)}
 {:else if id === 4}
     <p>Сайтики моих кентафариков.</p>
     <a href="https://bento.me/sasik">sasik</a> <br>
     <a href="https://ry0.ru/">ry0</a>
 {:else if id === 5}
     <center>
-    <h1>Сайт в разработке!</h1>
-    <h2>Принимаю активный фидбек в личку в телеграм:</h2>
-    <h3><a href="https://t.me/zazios">@ZAZiOs</a></h3>
+        <h4>Выберите язык:</h4>
+        <button on:click={() => changeLanguage('ru')}>Russian</button>
+        <button on:click={() => changeLanguage('en')}>English</button>
     </center>
 {/if}
 </div>

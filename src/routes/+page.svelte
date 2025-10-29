@@ -4,6 +4,10 @@
     import { fade } from 'svelte/transition';
     import { cubicIn, cubicOut } from 'svelte/easing';
 
+    import { t as trans, changeLanguage } from '$lib/i18n.js';
+    $: t = $trans;
+
+    // --------- CUSTOM ANIMATIONS ---------
     function fadeZoom(node, params) {
         const { duration = 250, scale = 0.9, direction = "in" } = params;
         const easing = direction === 'in' ? cubicOut : cubicIn;
@@ -13,6 +17,10 @@
             }
         };
     }
+
+
+
+    // --------- VARIABLES INIT ---------
     let isMobile = false;
     if (browser) isMobile = window.innerWidth <= 768;
 
@@ -33,8 +41,6 @@
         {id: 4, title: "Мои друзья", icon: "/icons/friends-icon.ico"},
     ]
     let activeIcon = null;
-
-
     
 	let activeWindow = null;
     let lastActiveWindowId = 2;
@@ -65,6 +71,10 @@
 
     let openedWindows = [];
 
+
+    // --------- WINDOWS MOVING SYSTEM ---------
+
+
     async function moveWindowOnTop(e, win) {
         if (!browser) return;
         await new Promise(resolve => setTimeout(resolve, 100))
@@ -83,7 +93,6 @@
         offsetX = e.clientX - el.getBoundingClientRect().left;
         offsetY = e.clientY - el.getBoundingClientRect().top;
 
-        // ставим окно на верхний слой
         el.style.zIndex = zIndexCounter++;
 
         document.addEventListener("mousemove", drag);
@@ -114,6 +123,9 @@
 		document.removeEventListener("mousemove", drag);
 		document.removeEventListener("mouseup", stopDrag);
 	}
+
+
+    // --------- RESIZE WINDOW SPLASH ---------
 
     function onResize() {
         isMobile = window.innerWidth <= 768;
@@ -164,6 +176,10 @@
         });
     }
 
+
+    // --------- WINDOWS CLOSING / OPENING API ---------
+
+
     async function closeWindow(id) {
         if (id === 3) {
             openedWindows = openedWindows.filter(winId => winId !== 3);
@@ -195,9 +211,10 @@
         window.addEventListener("resize", onResize);
     }
 
+    // START ANIMATION
     async function start() {
         for await (let win of initWindows) {
-            if (win.id === 5) continue;
+            //if (win.id === 5) continue;
             await new Promise(resolve => setTimeout(resolve, 100))
             openWindow(win.id)
         }
@@ -206,10 +223,12 @@
     start()
 
 
+    // --------- GLOBAL FOR CONTENTS OF WINDOWS ---------
+
     let selectedProject = 'questbench';
     let projectNames = {
         questbench: "QuestBench",
-        projectX: "Project X"
+        ovknative: "OpenVK Native"
     }
 </script>
 
@@ -422,7 +441,7 @@
                         <button aria-label="Close" on:click={() => closeWindow(win.id)}></button>
                     </div>
                 {:else}
-				    <div class="title-bar-text">{win.title}</div>
+				    <div class="title-bar-text">{t(`win.${win.id}`)}</div>
                     <div class="title-bar-controls">
                         <button aria-label="Close" on:click={() => closeWindow(win.id)}></button>
                     </div>
@@ -434,5 +453,6 @@
 		</div>
         {/if}
 	{/each}
+
 </div>
 {/if}

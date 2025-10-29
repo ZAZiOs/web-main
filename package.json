@@ -26,6 +26,7 @@
 		"@sveltejs/adapter-vercel": "^5.7.0",
 		"axios": "^1.6.7",
 		"markdown": "^0.5.0",
+		"marked": "^16.4.1",
 		"svelte-time": "^0.8.2"
 	}
 }
