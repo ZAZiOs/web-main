@@ -22,7 +22,7 @@ export const t = derived(
 );
 
 // 🌐 смена языка
-export async function changeLanguage(langcode) {
+export async function changeLanguage(langcode, beforeset) {
   if (!browser) return;
 
   try {
@@ -40,6 +40,8 @@ export async function changeLanguage(langcode) {
       })
     );
 
+    if (beforeset) beforeset();
+    
     s.set(tempobj); // 👈 обновляем store
     currentLang.set(langcode); // 👈 обновляем язык
   } catch (err) {

@@ -1,3 +1,21 @@
 {
-    "test": "Test"
+    "language": "English",
+    "win": {
+        "2": "About Me",
+        "1": "My Projects",
+        "4": "My Friends",
+        "5": "Help"
+    },
+    "chooseLang": "Choose a language:",
+    "projects": {
+        "win_prefix": "Project: %1s",
+        "unknown_project": "Unknown project",
+        "info": "Here my projects will be displayed"
+    },
+    "about": {
+        "zaza": "This is Zaza"
+    },
+    "friends": {
+        "info": "Websites of my homies"
+    }
 }

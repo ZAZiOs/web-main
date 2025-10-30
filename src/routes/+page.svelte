@@ -212,15 +212,15 @@
     }
 
     // START ANIMATION
-    async function start() {
+    async function openAllWindows(timeout = 100) {
         for await (let win of initWindows) {
             //if (win.id === 5) continue;
-            await new Promise(resolve => setTimeout(resolve, 100))
+            await new Promise(resolve => setTimeout(resolve, timeout))
             openWindow(win.id)
         }
     }
 
-    start()
+    openAllWindows()
 
 
     // --------- GLOBAL FOR CONTENTS OF WINDOWS ---------
@@ -230,6 +230,24 @@
         questbench: "QuestBench",
         ovknative: "OpenVK Native"
     }
+
+    const closeAllWindows = async (timeout = 100) => {
+        await Promise.all(initWindows.map((win, i) =>
+            new Promise(resolve => {
+                setTimeout(async () => {
+                    await closeWindow(win.id);
+                    resolve();
+                }, i * timeout);
+            })
+        ));
+        await new Promise(resolve => setTimeout(resolve, 100))
+        return;
+    }
+
+    const windowManipulate = {
+        closeWindow, openWindow, closeAllWindows, openAllWindows
+    }
+
 </script>
 
 
@@ -407,7 +425,7 @@
         <!-- svelte-ignore a11y-click-events-have-key-events -->
         <div class="desktop-icon" class:active={activeIcon == icon.id} role="menu" tabindex={icon.id + 10} on:dblclick={() => openWindow(icon.id)} on:click={() => activeIcon = icon.id}>
             <img src={icon.icon} alt={icon.title} class="desktop-icon-image">
-            <span class="text">{icon.title}</span>
+            <span class="text">{t(`win.${icon.id}`)}</span>
         </div>
     {/each}
 </div>
@@ -436,7 +454,7 @@
 		>
 			<div class="title-bar" on:mousedown={(e) => startDrag(e, win)} role="toolbar" tabindex={win.id} aria-roledescription="Draggable Window">
                 {#if win.id === 3}
-                    <div class="title-bar-text">Проект: {projectNames[selectedProject] || 'Неизвестный проект'}</div>
+                    <div class="title-bar-text">{t('projects.win_prefix', projectNames[selectedProject] || t('projects.unknown_project'))}</div>
                     <div class="title-bar-controls">
                         <button aria-label="Close" on:click={() => closeWindow(win.id)}></button>
                     </div>
@@ -448,7 +466,7 @@
                 {/if}
 			</div>
 			<div class="window-body has-scrollbar" style="height: calc(100% - 35px);">
-				<WindowContents id={win.id} {isMobile} bind:selectedProject></WindowContents>
+				<WindowContents id={win.id} {isMobile} bind:selectedProject {windowManipulate}></WindowContents>
 			</div>
 		</div>
         {/if}
