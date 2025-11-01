@@ -3,6 +3,7 @@ import { browser } from '$app/environment';
 import { writable, derived } from 'svelte/store';
 import axios from 'axios';
 import { marked } from 'marked';
+import phrases from './phrases.json';
 
 export const s = writable({});           // 👈 реактивный объект переводов
 export const currentLang = writable('ru');
@@ -30,7 +31,7 @@ export async function changeLanguage(langcode, beforeset) {
     const tempobj = resp.data;
 
     // Загружаем markdown-файлы
-    const MDsToFetch = ['questbench', 'ovknative'];
+    const MDsToFetch = ['questbench', 'ovknative', 'about'];
     tempobj.md = {};
 
     await Promise.all(
@@ -53,3 +54,12 @@ export async function changeLanguage(langcode, beforeset) {
 if (browser) {
   changeLanguage('ru');
 }
+
+
+export const getPhrase = derived(currentLang, ($lang) => {
+  return () => {
+    const list = phrases[$lang] || phrases['en'] || [];
+    if (list.length === 0) return '';
+    return list[Math.floor(Math.random() * list.length)];
+  };
+});

@@ -6,7 +6,8 @@
     export let windowManipulate;
 
     // language
-    import { t as trans, changeLanguage as changLangSrv } from '$lib/i18n.js';
+    import { t as trans, changeLanguage as changLangSrv, getPhrase } from '$lib/i18n.js';
+
     $: t = $trans;
 
 
@@ -22,18 +23,191 @@
         return;
     }
 
+    function getAge() {
+        const year = 2006
+        const month = 7
+        const day = 6
+        const birthDate = new Date(year, month, day);
+        const currentDate = new Date();
+        let age = currentDate.getFullYear() - birthDate.getFullYear();
+    
+        const currentMonth = currentDate.getMonth();
+        const currentDay = currentDate.getDate();
+        
+        if (currentMonth < month || (currentMonth === month && currentDay < day)) {
+            age--;
+        }
+        
+        return age;
+    }
+
+    const getRandomPhrase = () => {
+        
+    }
+
+    const about_links = [
+        {
+            href: "https://t.me/zazios",
+            tag: "Telegram"
+        },
+        {
+            href: "https://t.me/zazios",
+            tag: "Telegram"
+        },
+        {
+            href: "https://t.me/zazios",
+            tag: "Telegram"
+        },
+        {
+            href: "https://t.me/zazios",
+            tag: "Telegram"
+        },
+        {
+            href: "https://t.me/zazios",
+            tag: "Telegram"
+        },
+        {
+            href: "https://t.me/zazios",
+            tag: "Telegram"
+        },
+        {
+            href: "https://t.me/zazios",
+            tag: "Telegram"
+        },
+        {
+            href: "https://t.me/zazios",
+            tag: "Telegram"
+        },
+        {
+            href: "https://t.me/zazios",
+            tag: "Telegram"
+        }
+    ]
+
 </script>
 
+<style>
+    .body-style {
+        font-family:system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif !important;
+        height: 100%;
+    }
+
+    .about {
+        overflow: hidden;
+    }
+    .about-left {
+        height: 100%;
+        padding: 10px;
+        background: linear-gradient(to bottom, #B2FFB7, #D9FFDB);
+        display: flex;
+        flex-direction: column;
+        max-width: 25%;
+        border-right: #94d6b0 2px solid;
+    }
+    .about-left .window {
+        --w7-w-bg: #45c4ba;
+        box-shadow: 1px 1px 4px 0px var(--w7-w-bd), inset 0 0 0 1px #fffa;
+        aspect-ratio: 1/1;
+        padding: 2px;
+        width: 100%;
+    }
+    .about-left .contactimg {
+        padding: 3px;
+        border-radius: 6px;
+    }
+
+    .contactimg {
+        display: block;
+        aspect-ratio: 1/1;
+        width: 100%;
+    }
+
+    .about-right {
+        width: 75%;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+    }
+
+    .about-phrase {
+
+    }
+
+    .ab-r-top {
+        background: linear-gradient(to bottom, #EDF8FF, #CCE1FE);
+        flex: 1;
+        padding-top: 10px;
+        padding-left: 20px;
+        overflow-y: auto;
+    }
+
+    .ab-r-top h1{
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        font-weight: 400;
+    }
+    .age {
+        font-size: 1.5rem;
+    }
+
+    .about-phrase {
+        font-style: italic;
+        font-size: 20px;
+        margin-top: -10px;
+        margin-bottom: 10px;
+        color: rgba(33, 37, 41, 0.6);
+    }
+
+    .about-md {
+        font-size: 16px;
+    }
+
+    .ab-r-bottom {
+        background: linear-gradient(to bottom, #CFE4FE, #9DC9FF);
+        height: 40px;
+        border-top: solid 1px #859fc4;
+        padding: 7px;
+        padding-left: 16px;
+        font-size: 18px;
+        gap: 10px;
+        display: flex;
+    }
+
+    .ab-r-bottom a {
+        display: block;
+        color: #002963;
+    }
+
+    .ab-r-bottom a:hover { color: #0c489c } 
+</style>
 
 <div class="body-style">
 {#if id === 2}
 <!-- about me -->
-    <div class="w-100 d-flex justify-content-between">
-        <div class="w-75 me-3">
-            <h1 class="text-end w-100">{t('about.zaza')} →</h1>
-        </div>
-        <img src="pfpic.png " class="window active pfpic w-25">
+<div class="w-100 d-flex justify-content-between about" style="height: 100%;">
+    <div class="about-left">
+        <div class="window">
+                <img src="pfpic.png" class="contactimg" alt="profile">
+        </div>  
     </div>
+    <div class="about-right">
+        <div class="ab-r-top has-scrollbar">
+            <div class="about-title">
+                <h1>ZAZiOs <span class="age">{t('about.age', getAge())}</span></h1>
+            </div>
+            <div class="about-phrase">{$getPhrase()}</div>
+            <div class="about-md">
+                {@html t(`md.about`)}
+            </div>
+        </div>
+        <div class="ab-r-bottom">
+            {#each about_links as lnk}
+                <a href="{lnk.href}">{lnk.tag}</a>
+            {/each}
+        </div>
+    </div>
+</div>
+
+
 {:else if id === 1}
 <!-- my project selection -->
     <p>{t('projects.info')}</p>
@@ -54,16 +228,3 @@
     </center>
 {/if}
 </div>
-
-<style>
-    .body-style {
-        font-family:system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif !important;
-    }
-    h1, h2, h3, h4, h5, h6 {
-        font-family:system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif !important;
-    }
-    .pfpic {
-        padding: 3px;
-        border-radius: 3px;
-    }
-</style>

@@ -1,7 +1,7 @@
 <script>
     import { browser } from "$app/environment";
     import WindowContents from "$lib/window-contents.svelte";
-    import { fade } from 'svelte/transition';
+    import { fade, slide } from 'svelte/transition';
     import { cubicIn, cubicOut } from 'svelte/easing';
 
     import { t as trans, changeLanguage } from '$lib/i18n.js';
@@ -355,6 +355,9 @@
     cursor: pointer;
     outline-color: #377ac78e;
     transition: 0.05s;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
 .desktop-icon.active {
@@ -370,7 +373,11 @@
     margin: 10px;
     display: block;
     width: 80px;
+    aspect-ratio: 1/1;
 }
+
+img         { opacity: 1; transition: all .2s; }
+img.hideimg { opacity: 0; transition: all .2s; }
 
 .desktop-icon .text {
     color: #fff;
@@ -418,13 +425,13 @@
 		</div>
 	{/each}
 </div>
-{:else}
+{:else if t('language') != 'language'}
 
-<div class="desktop-icons">
+<div class="desktop-icons" in:slide={{duration: 300}}>
     {#each desktopIcons as icon}
         <!-- svelte-ignore a11y-click-events-have-key-events -->
         <div class="desktop-icon" class:active={activeIcon == icon.id} role="menu" tabindex={icon.id + 10} on:dblclick={() => openWindow(icon.id)} on:click={() => activeIcon = icon.id}>
-            <img src={icon.icon} alt={icon.title} class="desktop-icon-image">
+            <img src={icon.icon} alt={icon.title} class="desktop-icon-image hideimg" on:load={(e) => e?.target?.classList ? e?.target?.classList.remove('hideimg') : ""}>
             <span class="text">{t(`win.${icon.id}`)}</span>
         </div>
     {/each}
@@ -465,7 +472,7 @@
                     </div>
                 {/if}
 			</div>
-			<div class="window-body has-scrollbar" style="height: calc(100% - 35px);">
+			<div class="window-body has-scrollbar" style="height: calc(100% - 35px); padding: 0;">
 				<WindowContents id={win.id} {isMobile} bind:selectedProject {windowManipulate}></WindowContents>
 			</div>
 		</div>
