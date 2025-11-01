@@ -41,46 +41,37 @@
         return age;
     }
 
-    const getRandomPhrase = () => {
-        
-    }
-
     const about_links = [
         {
-            href: "https://t.me/zazios",
+            href: "https://github.com/ZAZiOs",
+            tag: "GitHub"
+        },
+        {
+            href: "https://t.me/zazio_subs",
             tag: "Telegram"
         },
         {
-            href: "https://t.me/zazios",
-            tag: "Telegram"
+            href: "https://www.youtube.com/@zazios",
+            tag: "Youtube"
         },
         {
-            href: "https://t.me/zazios",
-            tag: "Telegram"
+            href: "https://ovk.to/zazios",
+            tag: "OpenVK"
         },
         {
-            href: "https://t.me/zazios",
-            tag: "Telegram"
+            href: "https://zazios.bandcamp.com/",
+            tag: "Bandcamp"
+        }
+    ]
+
+    const friend_links = [
+        {
+            href: "https://bento.me/sasik",
+            tag: "Sasiqq"
         },
         {
-            href: "https://t.me/zazios",
-            tag: "Telegram"
-        },
-        {
-            href: "https://t.me/zazios",
-            tag: "Telegram"
-        },
-        {
-            href: "https://t.me/zazios",
-            tag: "Telegram"
-        },
-        {
-            href: "https://t.me/zazios",
-            tag: "Telegram"
-        },
-        {
-            href: "https://t.me/zazios",
-            tag: "Telegram"
+            href: "https://ry0.ru/",
+            tag: "ry0"
         }
     ]
 
@@ -101,6 +92,7 @@
         background: linear-gradient(to bottom, #B2FFB7, #D9FFDB);
         display: flex;
         flex-direction: column;
+        justify-content: space-between;
         max-width: 25%;
         border-right: #94d6b0 2px solid;
     }
@@ -178,6 +170,51 @@
     }
 
     .ab-r-bottom a:hover { color: #0c489c } 
+
+
+    .icq {
+        min-height: 150px;
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+    }
+
+    .icq .toppart {
+        height: 30px;
+        background: linear-gradient(0deg,rgba(144, 195, 220, 1) 0%, rgba(53, 122, 197, 1) 73%, rgba(53, 122, 197, 1) 84%, rgba(104, 153, 211, 1) 100%);
+        border-bottom: 1px solid #939393;
+        box-shadow: 0px 1px 3px 0px #939393;
+    }
+
+    .icq .bottompart {
+
+    }
+    .icq .bottompart img {
+        image-rendering: pixelated;
+        width: 76px;
+        margin-left: 5px;
+    }
+
+    .icq .content {
+        padding: 10px;
+        padding-top: 5px;
+        font-size: 15px;
+        flex: 1;
+    }
+
+    .icq .top {
+        width: 100%;
+        text-align: center;
+        padding-bottom: 5px;
+        margin-bottom: 10px;
+        color: #555;
+        border-bottom: #999 1px solid;
+    }
+
+    .browser .md {
+        font-family: 'Times New Roman', Times, serif;
+    }
+
 </style>
 
 <div class="body-style">
@@ -187,7 +224,7 @@
     <div class="about-left">
         <div class="window">
                 <img src="pfpic.png" class="contactimg" alt="profile">
-        </div>  
+        </div>
     </div>
     <div class="about-right">
         <div class="ab-r-top has-scrollbar">
@@ -201,7 +238,7 @@
         </div>
         <div class="ab-r-bottom">
             {#each about_links as lnk}
-                <a href="{lnk.href}">{lnk.tag}</a>
+                <a href="{lnk.href}" target="_blank">{lnk.tag}</a>
             {/each}
         </div>
     </div>
@@ -215,11 +252,25 @@
     <button on:click={() => selectedProject = 'ovknative'}>OpenVK Native</button>
 {:else if id === 3}
 <!-- selected project -->
-    {@html t(`md.${selectedProject}`)}
+    <div class="browser">
+        <div class="md">
+            {@html t(`md.${selectedProject}`)}
+        </div>
+    </div>
+    
 {:else if id === 4}
-    <p>{t('friends.info')}</p>
-    <a href="https://bento.me/sasik">sasik</a> <br>
-    <a href="https://ry0.ru/">ry0</a>
+    <div class="icq">
+        <div class="toppart"></div>
+        <div class="content">
+            <div class="top">{t('friends.info')}</div>
+            {#each friend_links as link}
+                <a href={link.href} target="_blank"><img src="/icq-online.gif" alt="icq"> {link.tag}</a> <br>
+            {/each}
+        </div>
+        <div class="bottompart">
+            <img src="/ralsei.gif" alt="ralsei">
+        </div>
+    </div>
 {:else if id === 5}
     <center>
         <h4>{t('chooseLang')}</h4>

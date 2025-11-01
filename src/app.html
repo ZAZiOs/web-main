@@ -2,8 +2,20 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8" />
-		<link rel="icon" href="%sveltekit.assets%/favicon.png" />
+		<link rel="icon" href="%sveltekit.assets%/favicon.ico" />
+		<title>ZAZiOs.ru</title>
+		<meta name="description" content="Это сайт-визитка в стиле Windows 7. Здесь вы найдете информацию обо мне, моих проектах и как со мной связаться. Кстати, на компах можно двигать окошки!">
+		<meta name="keywords" content="ZAZiOs, визитка, Windows 7, портфолио, персональный сайт">
+		<meta name="author" content="ZAZiOs">
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+		<meta property="og:title" content="ZAZiOs - персонализированный сайт-визитка">
+		<meta property="og:description" content="Интерактивный сайт-портфолио в стиле классической Windows 7. Заходите, чтобы узнать обо мне больше!">
+		<meta property="og:image" content="https://zazios.ru/preview.jpg">
+		<meta property="og:url" content="https://zazios.ru">
+		<meta property="og:type" content="website">
+		<meta property="og:site_name" content="ZAZiOs.ru">
+
 		%sveltekit.head%
 
 		<link rel="preload" as="image" href="/wp/win7-1.jpg">
@@ -30,6 +42,8 @@
 		<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
     	<link href="/7.css" rel="stylesheet">
 		<link href="/styles.css" rel="stylesheet">
+
+		
 	</head>
 	<body data-sveltekit-preload-data="hover">
 		<div style="display: contents">%sveltekit.body%</div>

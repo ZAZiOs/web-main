@@ -393,6 +393,17 @@ img.hideimg { opacity: 0; transition: all .2s; }
 }
 
 
+.about-zaza {
+    --padding: 20px;
+    margin-left: calc(3px + calc(var(--padding) / 2 ));
+    margin-top: -160px;
+}
+
+.about-zaza img {
+    display: block;
+    max-width: calc(25% - var(--padding));
+}
+
 </style>
 
 {#if resizeTimeout}
@@ -475,6 +486,11 @@ img.hideimg { opacity: 0; transition: all .2s; }
 			<div class="window-body has-scrollbar" style="height: calc(100% - 35px); padding: 0;">
 				<WindowContents id={win.id} {isMobile} bind:selectedProject {windowManipulate}></WindowContents>
 			</div>
+            {#if win.id == 2}
+                <div class="about-zaza">
+                    <img src="/zazia.png" alt="minizaza">
+                </div>
+            {/if}
 		</div>
         {/if}
 	{/each}
