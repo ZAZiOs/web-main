@@ -6,7 +6,7 @@
     export let windowManipulate;
 
     // language
-    import { t as trans, changeLanguage as changLangSrv, getPhrase } from '$lib/i18n.js';
+    import { t as trans, changeLanguage as changLangSrv, getPhrase, getLangCode } from '$lib/i18n.js';
 
     $: t = $trans;
 
@@ -75,6 +75,29 @@
         }
     ]
 
+    const lang_list = [
+        {code: "ru", tag: "Russian"},
+        {code: "en", tag: "English"}
+    ]
+
+    let selected_browser_style = 'sans'
+    let browser_fs = 16
+
+    const browser_fs_change = (mod) => {
+        const max_size = 30;
+        const min_size = 9;
+        switch (mod) {
+            case "+":
+                if (browser_fs >= max_size) return;    
+                browser_fs += 2
+                return;
+            case "-":
+                if (browser_fs <= min_size) return;
+                browser_fs -= 2
+                return;
+        }
+    }
+
 </script>
 
 <style>
@@ -87,7 +110,6 @@
         overflow: hidden;
     }
     .about-left {
-        height: 100%;
         padding: 10px;
         background: linear-gradient(to bottom, #B2FFB7, #D9FFDB);
         display: flex;
@@ -119,10 +141,6 @@
         display: flex;
         flex-direction: column;
         justify-content: space-between;
-    }
-
-    .about-phrase {
-
     }
 
     .ab-r-top {
@@ -184,14 +202,25 @@
         background: linear-gradient(0deg,rgba(144, 195, 220, 1) 0%, rgba(53, 122, 197, 1) 73%, rgba(53, 122, 197, 1) 84%, rgba(104, 153, 211, 1) 100%);
         border-bottom: 1px solid #939393;
         box-shadow: 0px 1px 3px 0px #939393;
+        color: white;
+        padding: 5px;
+        text-align: center;
+        font-size: 14px;
+        font-style: italic;
     }
 
     .icq .bottompart {
-
+        background: linear-gradient(to bottom, #e6e6e6, #cccccc);
+        padding: 10px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border-top: solid 2px #555;
     }
+
     .icq .bottompart img {
-        image-rendering: pixelated;
-        width: 76px;
+        display: block;
+        max-width: min(90%, 150px);
         margin-left: 5px;
     }
 
@@ -211,10 +240,50 @@
         border-bottom: #999 1px solid;
     }
 
+    .browser { height: 100%; display: flex; flex-direction: column;}
     .browser .md {
-        font-family: 'Times New Roman', Times, serif;
+        overflow: auto;
+        padding: 8px;
+        padding-top: 0;
+        background-color: white;
+        flex: 1;
+        transition: font-family 0.25s ease, color 0.25s ease;
+        line-height: 1.6;
+        color: var(--text-color, #222);
     }
 
+    .browser .md.serif {
+        font-family: 'Times New Roman', Georgia, 'Noto Serif', serif;
+    }
+
+    .browser .md.sans {
+        font-family: 'Inter', 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+    }
+
+    .browser .md.mono {
+        font-family: 'JetBrains Mono', 'Fira Code', Consolas, monospace;
+    }
+
+    .browser .md-address {
+        display: block;
+        position: relative;
+        z-index: auto;
+        width: 100%;
+        background-color: white;
+        color: black;
+        border-radius: 0;
+        border-left: 0;
+        border-right: 0;
+        box-shadow: inset 0px 1px 3px 0px #93939393;
+    }
+
+    .lang {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        height: 100%;
+    }
 </style>
 
 <div class="body-style">
@@ -253,14 +322,78 @@
 {:else if id === 3}
 <!-- selected project -->
     <div class="browser">
-        <div class="md">
+        <ul role="menubar" class="can-hover">
+            <li role="menuitem" tabindex="0" aria-haspopup="true">
+              {t('projects.menu.file')}
+              <ul role="menu">
+                <li role="menuitem">
+                  <a href="#menubar">
+                    {t('projects.menu.open')}
+                  </a>
+                </li>
+                <li role="menuitem">
+                  <a href="/lang/{getLangCode()}/{selectedProject}.md"  target="_blank">
+                    {t('projects.menu.save')}
+                  </a>
+                </li>
+                <li role="menuitem"><button on:click={() => windowManipulate.closeWindow(id)}>{t('projects.menu.exit')}</button></li>
+              </ul>
+            </li>
+            <li role="menuitem" tabindex="0" aria-haspopup="true">
+            {t('projects.menu.view')}
+              <ul role="menu">
+                <li role="menuitem" tabindex="0" aria-haspopup="true">
+                    {t('projects.menu.zoom')}
+                  <ul role="menu">
+                    <li role="menuitem"><img src="https://img.icons8.com/color/20/000000/plus" alt="plus" ><button on:click={() => browser_fs_change("+")}>{t('projects.menu.zoom_in')}</button></li>
+                    <li role="menuitem"><img src="https://img.icons8.com/color/20/000000/minus" alt="minus" ><button on:click={() => browser_fs_change("-")}>{t('projects.menu.zoom_out')}</button></li>
+                  </ul>
+                </li>
+                <li role="menuitem" tabindex="0" aria-haspopup="true">
+                    {t('projects.menu.style')}
+                    <ul role="menu">
+                        <li role="menuitem">
+                            <input type="radio" name="icon-size" id="style1" checked bind:group={selected_browser_style} value="serif">
+                            <label for="style1">Serif</label>
+                        </li>
+                        <li role="menuitem">
+                            <input type="radio" name="icon-size" id="style2" bind:group={selected_browser_style} value="sans">
+                            <label for="style2">Sans</label>
+                        </li>
+                        <li role="menuitem">
+                            <input type="radio" name="icon-size" id="style3" bind:group={selected_browser_style} value="mono">
+                            <label for="style3">Mono</label>
+                        </li>
+                    </ul>
+                  </li>
+              </ul>
+            </li>
+            <li role="menuitem" tabindex="0" aria-haspopup="true">
+                {t('projects.menu.help')}
+              <ul role="menu">
+                <li role="menuitem"><a href="#menubar" on:click={() => windowManipulate.openWindow(5)}>{t('projects.menu.view_help')}</a></li>
+                <li role="menuitem"><a href="#menubar" on:click={() => windowManipulate.openWindow(10)}>{t('projects.menu.about')}</a></li>
+              </ul>
+            </li>
+          </ul>
+        <input type="text" class="md-address" placeholder=".md address" value='/lang/{getLangCode()}/{selectedProject}.md' disabled/>
+        <style>
+            .browser .md h1 { font-size: calc(var(--fsize) + 28px); }
+            .browser .md h2 { font-size: calc(var(--fsize) + 22px); }
+            .browser .md h3 { font-size: calc(var(--fsize) + 17px); }
+            .browser .md h4 { font-size: calc(var(--fsize) + 13px); }
+            .browser .md h5 { font-size: calc(var(--fsize) + 9px); }
+            .browser .md h6 { font-size: calc(var(--fsize) + 6px); }
+        </style>
+        <div class="md {selected_browser_style} has-scrollbar" style="--fsize: {browser_fs}px; font-size: {browser_fs}px">
             {@html t(`md.${selectedProject}`)}
         </div>
     </div>
     
 {:else if id === 4}
     <div class="icq">
-        <div class="toppart"></div>
+        <div class="toppart">
+        </div>
         <div class="content">
             <div class="top">{t('friends.info')}</div>
             {#each friend_links as link}
@@ -268,14 +401,36 @@
             {/each}
         </div>
         <div class="bottompart">
-            <img src="/ralsei.gif" alt="ralsei">
+            <img src="/cicq-label.png" alt="cicq">
         </div>
     </div>
 {:else if id === 5}
-    <center>
+    <div class="lang">
         <h4>{t('chooseLang')}</h4>
-        <button on:click={() => changeLanguage('ru')}>Russian</button>
-        <button on:click={() => changeLanguage('en')}>English</button>
-    </center>
+        <select on:change={(e) => changeLanguage(e.target.value)}>
+            <option disabled selected>Select...</option>
+            {#each lang_list as lang}
+                <option value={lang.code}>{lang.tag}</option>
+            {/each}
+        </select>
+        <h4 style="opacity: 0;">{t('chooseLang')}</h4>
+    </div>
+{:else if id === 10}
+
+О программе
+
+{:else if id === 11}
+
+{t('notice')}
+
+<ul>
+    <li>
+        {t('projects.menu.help')}
+        <ul>
+            <li>{t('projects.menu.view_help')}</li>
+        </ul>
+    </li>
+</ul>
+
 {/if}
 </div>

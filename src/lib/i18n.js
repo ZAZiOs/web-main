@@ -8,12 +8,20 @@ import phrases from './phrases.json';
 export const s = writable({});           // 👈 реактивный объект переводов
 export const currentLang = writable('ru');
 
+export function getLangCode() {
+  let langCode;
+  currentLang.subscribe((value) => {
+    langCode = value;
+  })();
+  return langCode;
+}
+
 export const t = derived(
   [s, currentLang],
   ([$s, $lang]) =>
     (key, ...replacements) => {
       let value = key.split('.').reduce((obj, part) => obj?.[part], $s);
-      if (typeof value !== 'string') return key;
+      if (typeof value !== 'string') return "str." + key;
 
       return value.replace(/%(\d+)s/g, (_, n) => {
         const i = parseInt(n) - 1;

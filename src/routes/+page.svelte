@@ -3,8 +3,8 @@
     import WindowContents from "$lib/window-contents.svelte";
     import { fade, slide } from 'svelte/transition';
     import { cubicIn, cubicOut } from 'svelte/easing';
-
-    import { t as trans, changeLanguage } from '$lib/i18n.js';
+    import { onMount } from "svelte";
+    import { t as trans, getLangCode } from '$lib/i18n.js';
     $: t = $trans;
 
     // --------- CUSTOM ANIMATIONS ---------
@@ -25,14 +25,17 @@
     if (browser) isMobile = window.innerWidth <= 768;
 
     let resizeTimeout = null;
+    let reopened_count = 0;
 
     // такой странный порядок не по айди из-за того как мобильный лайаут рендерится сверху вниз
 	const windows = [
+        { id: 5, title: "Справка", top: "35%", left: "30%", width: "39%", height: "30%" },    
         { id: 2, title: "Обо мне", top: "2%", left: "30%", width: "70%", height: "47%" },
 		{ id: 1, title: "Мои проекты", top: "2%", left: "1%", width: "28%", height: "47%" },
 		{ id: 3, title: "*Выбранный проект*", top: "50%", left: "1%", width: "68%", height: "47%" },
 		{ id: 4, title: "Мои друзья", top: "50%", left: "70%", width: "30%", height: "47%" },
-        { id: 5, title: "Справка", top: "25%", left: "30%", width: "39%", height: "50%" },
+        { id: 10, title: "О программе", top: "25%", left: "30%", width: "39%", height: "50%" },
+        { id: 11, title: "Заметка", top: "35%", left: "30%", width: "39%", height: "30%" },
 	];
 
     const desktopIcons = [
@@ -213,10 +216,17 @@
 
     // START ANIMATION
     async function openAllWindows(timeout = 100) {
-        for await (let win of initWindows) {
+        reopened_count++
+        const wins = initWindows.sort((a, b) => a.id - b.id);
+        for await (let win of wins) {
+            if (win.id >= 10) continue;
+            if (reopened_count > 1 && win.id === 5) continue;
             //if (win.id === 5) continue;
             await new Promise(resolve => setTimeout(resolve, timeout))
             openWindow(win.id)
+        }
+        if (reopened_count == 2) {
+            openWindow(11)
         }
     }
 
@@ -404,6 +414,19 @@ img.hideimg { opacity: 0; transition: all .2s; }
     max-width: calc(25% - var(--padding));
 }
 
+.window-body {
+    height: calc(100% - 35px) !important; 
+    padding: 0 !important;
+}
+
+.window-body:has(+ .status-bar) {
+    height: calc(100% - 55px) !important; 
+}
+
+.text-mono {
+    font-family: 'JetBrains Mono', 'Fira Code', Consolas, monospace;
+}
+
 </style>
 
 {#if resizeTimeout}
@@ -425,24 +448,25 @@ img.hideimg { opacity: 0; transition: all .2s; }
 			class="window glass mobile"
 			id={"win" + win.id}
 			style=""
+            out:fadeZoom={{duration: 200, direction: 'out'}}
             in:fadeZoom={{duration: 200, direction: 'in'}}
 		>
 			<div class="title-bar">
-				<div class="title-bar-text">{win.title}</div>
+				<div class="title-bar-text">{t(`win.${win.id}`)}</div>
 			</div>
 			<div class="window-body" style="height: calc(100% - 35px);">
-                <WindowContents id={win.id} {isMobile} bind:selectedProject></WindowContents>
+                <WindowContents id={win.id} {isMobile} bind:selectedProject {windowManipulate}></WindowContents>
 			</div>
 		</div>
 	{/each}
 </div>
-{:else if t('language') != 'language'}
+{:else if t('language') != 'str.language'}
 
-<div class="desktop-icons" in:slide={{duration: 300}}>
+<div class="desktop-icons" in:slide={{duration: 300}} role="menu">
     {#each desktopIcons as icon}
         <!-- svelte-ignore a11y-click-events-have-key-events -->
-        <div class="desktop-icon" class:active={activeIcon == icon.id} role="menu" tabindex={icon.id + 10} on:dblclick={() => openWindow(icon.id)} on:click={() => activeIcon = icon.id}>
-            <img src={icon.icon} alt={icon.title} class="desktop-icon-image hideimg" on:load={(e) => e?.target?.classList ? e?.target?.classList.remove('hideimg') : ""}>
+        <div class="desktop-icon" class:active={activeIcon == icon.id} role="menuitem" tabindex={icon.id + 10} on:dblclick={() => openWindow(icon.id)} on:click={() => activeIcon = icon.id}>
+            <img src={icon.icon} alt={icon.title} class="desktop-icon-image hideimg" on:load={(e) => e.target.classList.remove('hideimg')} >
             <span class="text">{t(`win.${icon.id}`)}</span>
         </div>
     {/each}
@@ -483,10 +507,15 @@ img.hideimg { opacity: 0; transition: all .2s; }
                     </div>
                 {/if}
 			</div>
-			<div class="window-body has-scrollbar" style="height: calc(100% - 35px); padding: 0;">
+			<div class="window-body has-scrollbar">
 				<WindowContents id={win.id} {isMobile} bind:selectedProject {windowManipulate}></WindowContents>
 			</div>
-            {#if win.id == 2}
+            {#if win.id === 3}
+            <div class="status-bar">
+                <p class="status-bar-field">Language <span class="text-mono">{t('language_international')}</span> loaded successfully.</p>
+                <p class="status-bar-field">Markdown file <span class="text-mono">{selectedProject}</span> loaded successfully.</p>
+            </div>
+            {:else if win.id === 2}
                 <div class="about-zaza">
                     <img src="/zazia.png" alt="minizaza">
                 </div>
