@@ -80,6 +80,11 @@
         {code: "en", tag: "English"}
     ]
 
+    const projects = [
+        {mdfile: "questbench", tag: "Questbench"},
+        {mdfile: "ovknative", tag: "OpenVK Native"}
+    ]
+
     let selected_browser_style = 'sans'
     let browser_fs = 16
 
@@ -284,6 +289,150 @@
         flex-direction: column;
         height: 100%;
     }
+
+    .projects {
+        background-image: url('/sky.png');
+        height: 100%;
+        background-size: auto 100%;
+        background-position: center center;
+        backdrop-filter: blur(2px);
+        padding: 10px;
+    }
+
+    .projbtn {
+        backdrop-filter: blur(2px);
+        border: 1px solid white;
+        border-radius: 3px;
+    }
+
+    /* 📱 Базовые стили Aero */
+.aero-button {
+    margin-top: 10px;
+    position: relative;
+    padding: 10px 24px;
+    border: none;
+    border-radius: 4px;
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    overflow: hidden;
+    outline: none;
+    
+    /* Glass effect */
+    background: rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    box-shadow: 
+        0 2px 10px rgba(0, 0, 0, 0.1),
+        inset 0 1px 0 rgba(255, 255, 255, 0.4),
+        inset 0 -1px 0 rgba(0, 0, 0, 0.1);
+    
+    color: white;
+    text-shadow: 0 1px 0 rgba(102, 102, 102, 0.5);
+}
+
+/* 🌈 Цветовые варианты */
+.aero-button.primary {
+    background: rgba(0, 120, 215, 0.3);
+    border: 1px solid rgba(0, 120, 215, 0.5);
+    color: #ffffff;
+    text-shadow: 0 1px 0 rgba(0, 0, 0, 0.3);
+}
+
+.aero-button.success {
+    background: rgba(76, 175, 80, 0.3);
+    border: 1px solid rgba(76, 175, 80, 0.5);
+    color: #ffffff;
+}
+
+.aero-button.warning {
+    background: rgba(255, 152, 0, 0.3);
+    border: 1px solid rgba(255, 152, 0, 0.5);
+    color: #ffffff;
+}
+
+.aero-button.danger {
+    background: rgba(244, 67, 54, 0.3);
+    border: 1px solid rgba(244, 67, 54, 0.5);
+    color: #ffffff;
+}
+
+/* ✨ Эффекты при наведении */
+.aero-button:hover {
+    background: rgba(255, 255, 255, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    box-shadow: 
+        0 4px 15px rgba(0, 0, 0, 0.15),
+        inset 0 1px 0 rgba(255, 255, 255, 0.6),
+        inset 0 -1px 0 rgba(0, 0, 0, 0.1);
+    transform: translateY(-1px);
+}
+
+.aero-button.primary:hover {
+    background: rgba(0, 120, 215, 0.4);
+    border: 1px solid rgba(0, 120, 215, 0.7);
+}
+
+/* 🎯 Активное состояние (нажатие) */
+.aero-button:active {
+    transform: translateY(1px);
+    box-shadow: 
+        0 1px 5px rgba(0, 0, 0, 0.1),
+        inset 0 1px 0 rgba(255, 255, 255, 0.3),
+        inset 0 -1px 0 rgba(0, 0, 0, 0.05);
+    background: rgba(255, 255, 255, 0.15);
+}
+
+.aero-button.primary:active {
+    background: rgba(0, 120, 215, 0.25);
+}
+
+/* 🔘 Disabled состояние */
+.aero-button:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: none;
+}
+
+/* 🎨 Специальные эффекты */
+.aero-button.glow {
+    animation: aero-glow 2s ease-in-out infinite alternate;
+}
+
+@keyframes aero-glow {
+    from {
+        box-shadow: 
+            0 2px 10px rgba(0, 120, 215, 0.3),
+            inset 0 1px 0 rgba(255, 255, 255, 0.4);
+    }
+    to {
+        box-shadow: 
+            0 2px 20px rgba(0, 120, 215, 0.6),
+            inset 0 1px 0 rgba(255, 255, 255, 0.6);
+    }
+}
+
+/* 📏 Размеры */
+.aero-button.small {
+    padding: 6px 16px;
+    font-size: 12px;
+}
+
+.aero-button.large {
+    padding: 14px 32px;
+    font-size: 16px;
+}
+
+.aero-button.block {
+    display: block;
+    width: 100%;
+}
 </style>
 
 <div class="body-style">
@@ -316,9 +465,13 @@
 
 {:else if id === 1}
 <!-- my project selection -->
-    <p>{t('projects.info')}</p>
-    <button on:click={() => selectedProject = 'questbench'}>questbench</button>
-    <button on:click={() => selectedProject = 'ovknative'}>OpenVK Native</button>
+<div class="projects">
+    {#each projects as proj}
+        <!-- svelte-ignore a11y-click-events-have-key-events -->
+        <div class="aero-button warn" role="menuitem" tabindex="0" on:click={() => selectedProject = proj.mdfile}> {proj.tag}</div>
+    {/each}
+</div>
+    
 {:else if id === 3}
 <!-- selected project -->
     <div class="browser">
@@ -326,11 +479,11 @@
             <li role="menuitem" tabindex="0" aria-haspopup="true">
               {t('projects.menu.file')}
               <ul role="menu">
-                <li role="menuitem">
+                <!--li role="menuitem">
                   <a href="#menubar">
                     {t('projects.menu.open')}
                   </a>
-                </li>
+                </li-->
                 <li role="menuitem">
                   <a href="/lang/{getLangCode()}/{selectedProject}.md"  target="_blank">
                     {t('projects.menu.save')}
@@ -345,8 +498,8 @@
                 <li role="menuitem" tabindex="0" aria-haspopup="true">
                     {t('projects.menu.zoom')}
                   <ul role="menu">
-                    <li role="menuitem"><img src="https://img.icons8.com/color/20/000000/plus" alt="plus" ><button on:click={() => browser_fs_change("+")}>{t('projects.menu.zoom_in')}</button></li>
-                    <li role="menuitem"><img src="https://img.icons8.com/color/20/000000/minus" alt="minus" ><button on:click={() => browser_fs_change("-")}>{t('projects.menu.zoom_out')}</button></li>
+                    <li role="menuitem"><img src="https://img.icons8.com/color/20/000000/plus" alt="+" ><button on:click={() => browser_fs_change("+")}>{t('projects.menu.zoom_in')}</button></li>
+                    <li role="menuitem"><img src="https://img.icons8.com/color/20/000000/minus" alt="-" ><button on:click={() => browser_fs_change("-")}>{t('projects.menu.zoom_out')}</button></li>
                   </ul>
                 </li>
                 <li role="menuitem" tabindex="0" aria-haspopup="true">
