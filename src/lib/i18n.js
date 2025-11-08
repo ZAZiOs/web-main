@@ -71,3 +71,28 @@ export const getPhrase = derived(currentLang, ($lang) => {
     return list[Math.floor(Math.random() * list.length)];
   };
 });
+
+export function formatLocalizedDate(dateString) {
+  if (!dateString) return '';
+
+  const [day, month, year] = dateString.split('.').map(Number);
+  const date = new Date(year, month - 1, day);
+
+  let langCode;
+  currentLang.subscribe(v => (langCode = v))();
+
+  const formattedDate = new Intl.DateTimeFormat(langCode, {
+    day: 'numeric',
+    month: 'long',
+    year: 'numeric'
+  }).format(date);
+
+  let translation;
+  s.subscribe(v => {
+    translation = v?.projects?.updated_at || 'Updated %1s';
+  })();
+
+  let result = translation.replace('%1s', formattedDate);
+
+  return result;
+}

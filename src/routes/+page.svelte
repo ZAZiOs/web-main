@@ -39,8 +39,8 @@
 	];
 
     const desktopIcons = [
-        {id: 1, title: "Мои проекты", icon: "/icons/folder-icon.ico"},
         {id: 2, title: "Обо мне", icon: "/icons/system-icon.ico"},
+        {id: 1, title: "Мои проекты", icon: "/icons/folder-icon.ico"},
         {id: 4, title: "Мои друзья", icon: "/icons/friends-icon.ico"},
     ]
     let activeIcon = null;
@@ -235,11 +235,7 @@
 
     // --------- GLOBAL FOR CONTENTS OF WINDOWS ---------
 
-    let selectedProject = 'questbench';
-    let projectNames = {
-        questbench: "QuestBench",
-        ovknative: "OpenVK Native"
-    }
+    let selectedProject = '';
 
     const closeAllWindows = async (timeout = 100) => {
         await Promise.all(initWindows.map((win, i) =>
@@ -496,7 +492,18 @@ img.hideimg { opacity: 0; transition: all .2s; }
 		>
 			<div class="title-bar" on:mousedown={(e) => startDrag(e, win)} role="toolbar" tabindex={win.id} aria-roledescription="Draggable Window">
                 {#if win.id === 3}
-                    <div class="title-bar-text">{t('projects.win_prefix', projectNames[selectedProject] || t('projects.unknown_project'))}</div>
+                    <div class="title-bar-text">
+                        {#if selectedProject === ''}
+                            {t('projects.win_unselected')}
+                        {:else}
+                        {
+                        t('projects.win_prefix', 
+                            t(`projects.sel.${selectedProject}`).startsWith('str') ? 
+                                t('projects.unknown_project') : 
+                                t(`projects.sel.${selectedProject}`))
+                        }
+                        {/if}
+                    </div>
                     <div class="title-bar-controls">
                         <button aria-label="Close" on:click={() => closeWindow(win.id)}></button>
                     </div>

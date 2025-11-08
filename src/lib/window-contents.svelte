@@ -1,12 +1,10 @@
 <script>
-    import { onMount } from "svelte";
-    import { browser } from "$app/environment";
-    import axios from "axios";
+    import { mdConvert } from '$lib/md-convert.js';
     export let id = 0, isMobile = false, selectedProject = 'questbench';
     export let windowManipulate;
 
     // language
-    import { t as trans, changeLanguage as changLangSrv, getPhrase, getLangCode } from '$lib/i18n.js';
+    import { t as trans, changeLanguage as changLangSrv, getPhrase, getLangCode, formatLocalizedDate } from '$lib/i18n.js';
 
     $: t = $trans;
 
@@ -71,7 +69,7 @@
         },
         {
             href: "https://ry0.ru/",
-            tag: "ry0"
+            tag: "Ry0"
         }
     ]
 
@@ -81,9 +79,65 @@
     ]
 
     const projects = [
-        {mdfile: "questbench", tag: "Questbench"},
-        {mdfile: "ovknative", tag: "OpenVK Native"}
-    ]
+        {
+            category: "ovk",
+            icon: "..",
+            files: [
+                { name: "ovknative", status: "wip" },
+                { name: "ovkwinxp", status: "done" },
+                { name: "ovkcoinbot", status: "archived" }
+            ]
+        },
+        {
+            category: "dm",
+            icon: "..",
+            files: [
+                { name: "dm_infra", status: "done" },
+                { name: "dm_arg", status: "wip" },
+                { name: "dm_chan_tgbot", status: "done" }
+            ]
+        },
+        {
+            category: "translations",
+            icon: "..",
+            files: [
+                { name: "deltarunaru", status: "wip" },
+                { name: "gmsutml", status: "wip" },
+                { name: "wiilink", status: "archived" },
+                { name: "rhfever", status: "archived" }
+            ]
+        },
+        {
+            category: "other",
+            icon: "..",
+            files: [
+                { name: "ld58", status: "done" },
+                { name: "infra", status: "done" },
+                { name: "pokedex", status: "archived" }
+            ]
+        },
+        {
+            category: "unfinished",
+            icon: "..",
+            files: [
+                { name: "questbench", status: "archived" },
+                { name: "dubpanel", status: "archived" },
+                { name: "mindwave", status: "wip" }
+            ]
+        }
+    ];
+    
+    let opened_categories = [];
+
+    const toggleCategory = (category) => {
+        if (opened_categories.includes(category)) {
+            opened_categories = opened_categories.filter(cat => cat !== category);
+        } else {
+            opened_categories = [...opened_categories, category];
+        }
+    };
+
+    let projects_updated_at = "09.11.2025"
 
     let selected_browser_style = 'sans'
     let browser_fs = 16
@@ -103,7 +157,40 @@
         }
     }
 
+    let customMdHTML = "";
+    let mdFileInput;
+
+    let md_address_string = `/lang/${getLangCode()}/${selectedProject}.md`;
+
+    function openFileSelector() {
+        mdFileInput.click();
+    }
+
+    async function handleMdFileChange(event) {
+        const file = event.target.files[0];
+        if (!file) return;
+        
+        md_address_string = `/external/${file.lastModified}/${file.name}`;
+
+        const text = await file.text();
+        customMdHTML = mdConvert(text);
+    }
+
+    const selectProject = (proj) => {
+        selectedProject = proj;
+        customMdHTML = "";
+        md_address_string = `/lang/${getLangCode()}/${selectedProject}.md`;
+    }
+
 </script>
+
+<input
+  type="file"
+  accept=".md,.txt"
+  bind:this={mdFileInput}
+  on:change={handleMdFileChange}
+  style="display: none;"
+/>
 
 <style>
     .body-style {
@@ -291,148 +378,178 @@
     }
 
     .projects {
-        background-image: url('/sky.png');
         height: 100%;
-        background-size: auto 100%;
-        background-position: center center;
-        backdrop-filter: blur(2px);
+        display: flex;
+        flex-direction: column;
+    }
+    .projects .top {
+        background: linear-gradient(180deg, #F3FAFF 0%, #E0EEFF 100%);
+        font-family: Segoe UI;
+        font-weight: 400;
+        font-style: Regular;
+        font-size: 32px;
+        line-height: 100%;
+        letter-spacing: 0%;
         padding: 10px;
+        padding-bottom: 15px;
+        border-bottom: 1px solid rgba(72, 72, 72, 1);
+        margin: 0;
     }
 
-    .projbtn {
-        backdrop-filter: blur(2px);
-        border: 1px solid white;
-        border-radius: 3px;
+    .projects .data {
+        flex: 1;
+        overflow-y: auto;
+        background: linear-gradient(180deg, #EBF7FF 65.73%, #A2CBFF 100%);
+        padding-bottom: 20px;
     }
 
-    /* 📱 Базовые стили Aero */
-.aero-button {
-    margin-top: 10px;
-    position: relative;
-    padding: 10px 24px;
-    border: none;
-    border-radius: 4px;
-    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-    font-size: 14px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    overflow: hidden;
-    outline: none;
-    
-    /* Glass effect */
-    background: rgba(255, 255, 255, 0.2);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-    border: 1px solid rgba(255, 255, 255, 0.3);
-    box-shadow: 
-        0 2px 10px rgba(0, 0, 0, 0.1),
-        inset 0 1px 0 rgba(255, 255, 255, 0.4),
-        inset 0 -1px 0 rgba(0, 0, 0, 0.1);
-    
-    color: white;
-    text-shadow: 0 1px 0 rgba(102, 102, 102, 0.5);
-}
-
-/* 🌈 Цветовые варианты */
-.aero-button.primary {
-    background: rgba(0, 120, 215, 0.3);
-    border: 1px solid rgba(0, 120, 215, 0.5);
-    color: #ffffff;
-    text-shadow: 0 1px 0 rgba(0, 0, 0, 0.3);
-}
-
-.aero-button.success {
-    background: rgba(76, 175, 80, 0.3);
-    border: 1px solid rgba(76, 175, 80, 0.5);
-    color: #ffffff;
-}
-
-.aero-button.warning {
-    background: rgba(255, 152, 0, 0.3);
-    border: 1px solid rgba(255, 152, 0, 0.5);
-    color: #ffffff;
-}
-
-.aero-button.danger {
-    background: rgba(244, 67, 54, 0.3);
-    border: 1px solid rgba(244, 67, 54, 0.5);
-    color: #ffffff;
-}
-
-/* ✨ Эффекты при наведении */
-.aero-button:hover {
-    background: rgba(255, 255, 255, 0.3);
-    border: 1px solid rgba(255, 255, 255, 0.5);
-    box-shadow: 
-        0 4px 15px rgba(0, 0, 0, 0.15),
-        inset 0 1px 0 rgba(255, 255, 255, 0.6),
-        inset 0 -1px 0 rgba(0, 0, 0, 0.1);
-    transform: translateY(-1px);
-}
-
-.aero-button.primary:hover {
-    background: rgba(0, 120, 215, 0.4);
-    border: 1px solid rgba(0, 120, 215, 0.7);
-}
-
-/* 🎯 Активное состояние (нажатие) */
-.aero-button:active {
-    transform: translateY(1px);
-    box-shadow: 
-        0 1px 5px rgba(0, 0, 0, 0.1),
-        inset 0 1px 0 rgba(255, 255, 255, 0.3),
-        inset 0 -1px 0 rgba(0, 0, 0, 0.05);
-    background: rgba(255, 255, 255, 0.15);
-}
-
-.aero-button.primary:active {
-    background: rgba(0, 120, 215, 0.25);
-}
-
-/* 🔘 Disabled состояние */
-.aero-button:disabled {
-    opacity: 0.6;
-    cursor: not-allowed;
-    transform: none;
-    background: rgba(255, 255, 255, 0.1);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    box-shadow: none;
-}
-
-/* 🎨 Специальные эффекты */
-.aero-button.glow {
-    animation: aero-glow 2s ease-in-out infinite alternate;
-}
-
-@keyframes aero-glow {
-    from {
-        box-shadow: 
-            0 2px 10px rgba(0, 120, 215, 0.3),
-            inset 0 1px 0 rgba(255, 255, 255, 0.4);
+    .projects .data::-webkit-scrollbar {
+        display: none;
     }
-    to {
-        box-shadow: 
-            0 2px 20px rgba(0, 120, 215, 0.6),
-            inset 0 1px 0 rgba(255, 255, 255, 0.6);
+
+    .projects .data {
+        -ms-overflow-style: none;
+        scrollbar-width: none;
     }
-}
 
-/* 📏 Размеры */
-.aero-button.small {
-    padding: 6px 16px;
-    font-size: 12px;
-}
+    .projects .category {
+        display: flex;
+        align-items: center;
+        padding: 10px;
+        border-bottom: 1px solid rgba(72, 72, 72, 1);
+        cursor: pointer;
+        background: linear-gradient(180deg, #F3FAFF 0%, #E0EEFF 100%);
+    }
 
-.aero-button.large {
-    padding: 14px 32px;
-    font-size: 16px;
-}
+    .projects .category .icon {
+        width: 22px;
+        height: 22px;
+        background-image: var(--icon);
+        background-size: cover;
+        /*background-color: rgba(72, 72, 72, 1);*/
+        margin-right: 10px;
+    }
 
-.aero-button.block {
-    display: block;
-    width: 100%;
-}
+    .projects .category .name {
+        font-family: Segoe UI;
+        font-weight: 400;
+        font-style: Regular;
+        font-size: 22px;
+        leading-trim: NONE;
+        line-height: 100%;
+        letter-spacing: 0%;
+    }
+
+    .projects .category .opened, .projects .category .closed {
+        background-image: url('/arrow.svg');
+        background-size: 100% 100%;
+        width: 12px;
+        height: 8px;
+    }
+
+    .projects .category .closed {
+        transform: rotate(180deg);
+    }
+
+    .projects .project-list .project {
+        display: flex;
+        padding: 10px;
+        font-family: Segoe UI;
+        font-weight: 400;
+        font-style: Regular;
+        font-size: 20px;
+        leading-trim: NONE;
+        line-height: 100%;
+        letter-spacing: 0%;
+        vertical-align: middle;
+        border-bottom: 1px solid rgba(62, 82, 110, 1);
+        cursor: pointer;
+    }
+
+    .projects .project-list .project .status {
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+        background: linear-gradient(180deg, #2360B7 0%, #75AAF4 100%);
+        border: 1px solid rgba(55, 94, 148, 1);
+        margin-right: 10px;
+        margin-top: 4px;
+    }
+
+    .projects .project-list .project.archived {
+        color: rgba(86, 90, 96, 1);
+        background: linear-gradient(180deg, #C8CCD0 0%, #E8F0FB 100%);
+    }
+    .projects .project-list .project.archived .status {
+        background: linear-gradient(180deg, #99A8BD 0%, #D9E4F4 100%);
+        border: 1px solid rgba(86, 90, 96, 1)
+    }
+
+    .projects .project-list .project.done {
+        color: rgba(66, 110, 62, 1);
+        background: linear-gradient(360deg, #DAFFD5 0%, #B9FFB9 100%);
+
+    }
+    .projects .project-list .project.done .status {
+        background: linear-gradient(180deg, #3CB723 0%, #8AF475 100%);
+        border: 1px solid rgba(66, 110, 62, 1)
+    }
+
+    .projects .project-list .project.wip {
+        color: rgba(55, 94, 148, 1);
+        background: linear-gradient(360deg, #D5E6FF 0%, #B9D7FF 100%);
+    }
+    .projects .project-list .project.wip .status {
+        background: linear-gradient(180deg, #2360B7 0%, #75AAF4 100%);
+        border: 1px solid rgba(55, 94, 148, 1)
+    }
+
+    .projects .bottom {
+        background: linear-gradient(180deg, #D3E7FF 0%, #C7E2FF 100%);
+        text-align: center;
+        font-family: Segoe UI;
+        font-weight: 400;
+        font-style: Regular;
+        font-size: 13px;
+        leading-trim: NONE;
+        line-height: 100%;
+        letter-spacing: 0%;
+        text-align: center;
+        padding: 10px;
+        border-top: 1px solid rgba(72, 72, 72, 1);
+    }
+
+    .lang-notice {
+        display: flex;
+        height: 100%;
+        flex-direction: column;
+        justify-content: center;
+        padding: 15px;
+        font-size: 16px;
+        padding-top: 5px;
+    }
+
+    .lang-notice ul {
+        list-style: none;
+        padding-left: 20px;
+    }
+
+    .lang-notice li {
+        position: relative;
+        padding-left: 15px;
+    }
+
+    .lang-notice li::before {
+        content: "";
+        position: absolute;
+        left: 0;
+        top: 8px;
+        width: 0;
+        height: 0;
+        border-left: 5px solid currentColor;
+        border-top: 3px solid transparent;
+        border-bottom: 3px solid transparent;
+    }
 </style>
 
 <div class="body-style">
@@ -466,10 +583,38 @@
 {:else if id === 1}
 <!-- my project selection -->
 <div class="projects">
-    {#each projects as proj}
+    <h3 class="top">{t('projects.sel.title')}</h3>
+    <div class="data">
+        {#each projects as category}
         <!-- svelte-ignore a11y-click-events-have-key-events -->
-        <div class="aero-button warn" role="menuitem" tabindex="0" on:click={() => selectedProject = proj.mdfile}> {proj.tag}</div>
-    {/each}
+        <!-- svelte-ignore a11y-no-static-element-interactions -->
+        <div class="category" on:click={() => toggleCategory(category.category)}>
+            <div class="icon" style="--icon: {category.icon}"></div>
+            <div class="name">{t(`projects.sel.${category.category}`)}</div>
+            <div style="flex: 1;" />
+            {#if opened_categories.includes(category.category)}
+                <div class="opened"></div>
+            {:else}
+                <div class="closed"></div>
+            {/if}
+        </div>
+        {#if opened_categories.includes(category.category)}
+        <div class="project-list">
+            <!-- svelte-ignore a11y-no-static-element-interactions -->
+            {#each category.files as proj}
+            <!-- svelte-ignore a11y-click-events-have-key-events -->
+            <div class="project {proj.status}" on:click={() => selectProject(proj.name)}>
+                <div class="status"></div>
+                <div class="name">{t(`projects.sel.${proj.name}`)}</div>
+            </div>
+            {/each}
+        </div>
+        {/if}
+        {/each}
+    </div>
+    <div class="bottom">
+        {formatLocalizedDate(projects_updated_at)}
+    </div>
 </div>
     
 {:else if id === 3}
@@ -480,9 +625,10 @@
               {t('projects.menu.file')}
               <ul role="menu">
                 <!--li role="menuitem">
-                  <a href="#menubar">
+                  Требует доработок, загрузки файла например и тд.
+                  <button on:click={openFileSelector}>
                     {t('projects.menu.open')}
-                  </a>
+                  </button>
                 </li-->
                 <li role="menuitem">
                   <a href="/lang/{getLangCode()}/{selectedProject}.md"  target="_blank">
@@ -524,12 +670,16 @@
             <li role="menuitem" tabindex="0" aria-haspopup="true">
                 {t('projects.menu.help')}
               <ul role="menu">
-                <li role="menuitem"><a href="#menubar" on:click={() => windowManipulate.openWindow(5)}>{t('projects.menu.view_help')}</a></li>
+                <li role="menuitem"><a href="#menubar" on:click={() => windowManipulate.openWindow(5)}>{t('projects.menu.change_lang')}</a></li>
                 <li role="menuitem"><a href="#menubar" on:click={() => windowManipulate.openWindow(10)}>{t('projects.menu.about')}</a></li>
               </ul>
             </li>
           </ul>
+        {#if selectedProject !== ""}
         <input type="text" class="md-address" placeholder=".md address" value='/lang/{getLangCode()}/{selectedProject}.md' disabled/>
+        {:else}
+        <input type="text" class="md-address" placeholder=".md address" value='/' disabled/>
+        {/if}
         <style>
             .browser .md h1 { font-size: calc(var(--fsize) + 28px); }
             .browser .md h2 { font-size: calc(var(--fsize) + 22px); }
@@ -539,7 +689,15 @@
             .browser .md h6 { font-size: calc(var(--fsize) + 6px); }
         </style>
         <div class="md {selected_browser_style} has-scrollbar" style="--fsize: {browser_fs}px; font-size: {browser_fs}px">
-            {@html t(`md.${selectedProject}`)}
+            {#if customMdHTML !== ""}
+                {@html customMdHTML}
+            {:else if selectedProject === ""}
+                {@html t('projects.no_project_selected', t('win.1'))}
+            {:else if t(`md.${selectedProject}`).startsWith('str.')}
+                <i>No markdown file found for project "{selectedProject}" in language "{getLangCode()}".</i>
+            {:else}
+                {@html t(`md.${selectedProject}`)}
+            {/if}
         </div>
     </div>
     
@@ -573,17 +731,16 @@
 О программе
 
 {:else if id === 11}
-
-{t('notice')}
-
-<ul>
-    <li>
-        {t('projects.menu.help')}
-        <ul>
-            <li>{t('projects.menu.view_help')}</li>
-        </ul>
-    </li>
-</ul>
-
+<div class="lang-notice">
+    {t('notice')}
+    <ul>
+        <li>
+            {t('projects.menu.help')}
+            <ul>
+                <li>{t('projects.menu.change_lang')}</li>
+            </ul>
+        </li>
+    </ul>
+</div>
 {/if}
 </div>
