@@ -487,7 +487,7 @@
 
     .projects .project-list .project.done {
         color: rgba(66, 110, 62, 1);
-        background: linear-gradient(360deg, #DAFFD5 0%, #B9FFB9 100%);
+        background: linear-gradient(360deg, #DAFFD5 0%, #98f098 100%);
 
     }
     .projects .project-list .project.done .status {
@@ -497,7 +497,7 @@
 
     .projects .project-list .project.wip {
         color: rgba(55, 94, 148, 1);
-        background: linear-gradient(360deg, #D5E6FF 0%, #B9D7FF 100%);
+        background: linear-gradient(360deg, #D5E6FF 0%, #92bef6 100%);
     }
     .projects .project-list .project.wip .status {
         background: linear-gradient(180deg, #2360B7 0%, #75AAF4 100%);

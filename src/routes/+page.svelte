@@ -163,7 +163,9 @@
             el.style.height = (heightPercent / 100 * baseHeight) + "px";
         });
 
-        initWindows = windows.map(win => {
+        const wins = windows.sort((a, b) => a.id - b.id);
+
+        initWindows = wins.map(win => {
             const topPercent = parseFloat(win.top);    // 2
             const leftPercent = parseFloat(win.left);  // 30
             const widthPercent = parseFloat(win.width);
