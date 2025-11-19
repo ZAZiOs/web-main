@@ -29,13 +29,13 @@
 
     // такой странный порядок не по айди из-за того как мобильный лайаут рендерится сверху вниз
 	const windows = [
-        { id: 5, title: "Справка", top: "35%", left: "30%", width: "39%", height: "30%" },    
-        { id: 2, title: "Обо мне", top: "2%", left: "30%", width: "70%", height: "47%" },
-		{ id: 1, title: "Мои проекты", top: "2%", left: "1%", width: "28%", height: "47%" },
-		{ id: 3, title: "*Выбранный проект*", top: "50%", left: "1%", width: "68%", height: "47%" },
-		{ id: 4, title: "Мои друзья", top: "50%", left: "70%", width: "30%", height: "47%" },
-        { id: 10, title: "О программе", top: "25%", left: "30%", width: "39%", height: "50%" },
-        { id: 11, title: "Заметка", top: "35%", left: "30%", width: "39%", height: "30%" },
+        { id: 1, order: 1, title: "Мои проекты", top: "2%", left: "1%", width: "28%", height: "47%" },
+        { id: 2, order: 0, title: "Обо мне", top: "2%", left: "30%", width: "70%", height: "47%" },
+        { id: 3, order: 2, title: "*Выбранный проект*", top: "50%", left: "1%", width: "68%", height: "47%" },
+        { id: 4, order: 3, title: "Мои друзья", top: "50%", left: "70%", width: "30%", height: "47%" },
+        { id: 5, order: 5, title: "Справка", top: "35%", left: "30%", width: "39%", height: "30%" },  
+        { id: 10, order: 4, title: "О программе", top: "25%", left: "30%", width: "39%", height: "50%" },
+        { id: 11, order: 6, title: "Заметка", top: "35%", left: "30%", width: "39%", height: "30%" },
 	];
 
     const desktopIcons = [
@@ -440,24 +440,43 @@ img.hideimg { opacity: 0; transition: all .2s; }
 {/if}
 
 {#if isMobile}
-<div id="desktop-mobile">
-	{#each windows as win}
-		<div
-			class="window glass mobile"
-			id={"win" + win.id}
-			style=""
-            out:fadeZoom={{duration: 200, direction: 'out'}}
-            in:fadeZoom={{duration: 200, direction: 'in'}}
-		>
-			<div class="title-bar">
-				<div class="title-bar-text">{t(`win.${win.id}`)}</div>
-			</div>
-			<div class="window-body" style="height: calc(100% - 35px);">
-                <WindowContents id={win.id} {isMobile} bind:selectedProject {windowManipulate}></WindowContents>
-			</div>
-		</div>
-	{/each}
-</div>
+    {#if !t('language').startsWith('str.')}
+    <div id="desktop-mobile" in:fade={{duration: 200}}>
+        {#each windows.sort((a, b) => a.order - b.order) as win (win.id)}
+            {#if !([5, 11].includes(win.id))}
+            <div
+                class="window glass mobile"
+                id={"win" + win.id}
+                style=""
+                out:fadeZoom={{duration: 200, direction: 'out'}}
+                in:fadeZoom={{duration: 200, direction: 'in'}}
+            >
+                <div class="title-bar">
+                    {#if win.id === 3}
+                        <div class="title-bar-text">
+                            {#if selectedProject === ''}
+                                {t('projects.win_unselected')}
+                            {:else}
+                            {
+                            t('projects.win_prefix', 
+                                t(`projects.sel.${selectedProject}`).startsWith('str') ? 
+                                    t('projects.unknown_project') : 
+                                    t(`projects.sel.${selectedProject}`))
+                            }
+                            {/if}
+                        </div>
+                    {:else}
+                        <div class="title-bar-text">{t(`win.${win.id}`)}</div>
+                    {/if}
+                </div>
+                <div class="window-body" style="height: calc(100% - 35px);">
+                    <WindowContents id={win.id} {isMobile} bind:selectedProject {windowManipulate}></WindowContents>
+                </div>
+            </div>
+            {/if}
+        {/each}
+    </div>
+    {/if}
 {:else if t('language') != 'str.language'}
 
 <div class="desktop-icons" in:slide={{duration: 300}} role="menu">

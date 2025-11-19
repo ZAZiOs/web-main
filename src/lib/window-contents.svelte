@@ -205,6 +205,7 @@
         padding: 2px;
         width: 100%;
     }
+
     .about-left .contactimg {
         padding: 3px;
         border-radius: 6px;
@@ -216,11 +217,44 @@
         width: 100%;
     }
 
+    .mobile-about-header {
+        display: flex;
+        margin-top: 5px;
+        padding-bottom: 5px;
+        margin-bottom: 4px;
+        border-bottom: solid 1px #ccc;
+    }
+
+    .mobile-about-header .pfpic {
+        margin-left: -3px;
+        margin-right: 13px;
+        max-width: 25%;
+    }
+
+    .pfpic .window {
+        --w7-w-bg: #45c4ba;
+        box-shadow: 1px 1px 2px 0px var(--w7-w-bd), inset 0 0 0 1px #fffa;
+        aspect-ratio: 1/1;
+        padding: 2px;
+        width: 100%;
+    }
+
+    .pfpic .contactimg {
+        padding: 3px;
+        border-radius: 6px;
+    }
+
+
+
     .about-right {
         width: 75%;
         display: flex;
         flex-direction: column;
         justify-content: space-between;
+    }
+
+    .about-right.mobile {
+        width: 100%;
     }
 
     .ab-r-top {
@@ -560,17 +594,36 @@
 {#if id === 2}
 <!-- about me -->
 <div class="w-100 d-flex justify-content-between about" style="height: 100%;">
+    {#if !isMobile}
     <div class="about-left">
         <div class="window">
                 <img src="pfpic.png" class="contactimg" alt="profile">
         </div>
     </div>
-    <div class="about-right">
+    {/if}
+    <div class="about-right" class:mobile={isMobile}>
+        
         <div class="ab-r-top has-scrollbar">
+            {#if isMobile}
+            <div class="mobile-about-header">
+                <div class="pfpic">
+                    <div class="window">
+                        <img src="pfpic.png" class="contactimg" alt="profile">
+                    </div>
+                </div>
+                <div>
+                    <div class="about-title">
+                        <h1>ZAZiOs <span class="age">{t('about.age', getAge())}</span></h1>
+                    </div>
+                    <div class="about-phrase">{t('timenow')} {timeString}</div>
+                </div>
+            </div>
+            {:else}
             <div class="about-title">
                 <h1>ZAZiOs <span class="age">{t('about.age', getAge())}</span></h1>
             </div>
             <div class="about-phrase">{t('timenow')} {timeString}</div>
+            {/if}
             <div class="about-md">
                 {@html t(`md.about`)}
             </div>
@@ -624,6 +677,7 @@
 {:else if id === 3}
 <!-- selected project -->
     <div class="browser">
+        {#if !isMobile}
         <ul role="menubar" class="can-hover">
             <li role="menuitem" tabindex="0" aria-haspopup="true">
               {t('projects.menu.file')}
@@ -679,6 +733,7 @@
               </ul>
             </li>
           </ul>
+        {/if}
         {#if selectedProject !== ""}
         <input type="text" class="md-address" placeholder=".md address" value='/lang/{getLangCode()}/{selectedProject}.md' disabled/>
         {:else}
