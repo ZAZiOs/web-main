@@ -5,8 +5,58 @@ import axios from 'axios';
 import { marked } from 'marked';
 import phrases from './phrases.json';
 
+import {mdConvert} from './md-convert.js';
+
 export const s = writable({});           // 👈 реактивный объект переводов
 export const currentLang = writable('ru');
+
+export const projects = [
+  {
+      category: "ovk",
+      icon: "..",
+      files: [
+          { name: "ovknative", status: "wip" },
+          { name: "ovkwinxp", status: "done" },
+          { name: "ovkcoinbot", status: "archived" }
+      ]
+  },
+  {
+      category: "dm",
+      icon: "..",
+      files: [
+          { name: "dm_infra", status: "done" },
+          { name: "dm_arg", status: "wip" },
+          { name: "dm_chan_tgbot", status: "done" }
+      ]
+  },
+  {
+      category: "translations",
+      icon: "..",
+      files: [
+          { name: "deltarunaru", status: "wip" },
+          { name: "gmsutml", status: "wip" },
+          { name: "wiilink", status: "archived" },
+          { name: "rhfever", status: "archived" }
+      ]
+  },
+  {
+      category: "other",
+      icon: "..",
+      files: [
+          { name: "ld58", status: "done" },
+          { name: "pokedex", status: "archived" }
+      ]
+  },
+  {
+      category: "unfinished",
+      icon: "..",
+      files: [
+          { name: "questbench", status: "archived" },
+          { name: "mindwave", status: "wip" }
+      ]
+  }
+];
+
 
 export function getLangCode() {
   let langCode;
@@ -39,13 +89,20 @@ export async function changeLanguage(langcode, beforeset) {
     const tempobj = resp.data;
 
     // Загружаем markdown-файлы
-    const MDsToFetch = ['questbench', 'ovknative', 'about'];
+    const MDsToFetch = [
+      "about",
+      "ovknative", "ovkwinxp", "ovkcoinbot",
+      "dm_infra", "dm_arg", "dm_chan_tgbot", 
+      "deltarunaru", "gmsutml", "wiilink", "rhfever",
+      "ld58", "pokedex",
+      "questbench", "mindwave"
+    ]
     tempobj.md = {};
 
     await Promise.all(
       MDsToFetch.map(async (mdname) => {
-        const res = await axios.get(`/lang/${langcode}/${mdname}.md`);
-        tempobj.md[mdname] = marked.parse(res.data);
+        const res = await axios.get(`/lang/${langcode}/${mdname}.md`).catch(() => {});
+        if (res?.data) tempobj.md[mdname] = await mdConvert(res.data);
       })
     );
 

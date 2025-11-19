@@ -27,23 +27,25 @@
 
 		<script>
 			// preload bg image before SvelteKit loads
-			const wp_count = 6;
-			const now = new Date();
-			const index = Math.floor(now.getMinutes()) % wp_count;
-			const bgUrl = `/wp/win7-${index + 1}.jpg`;
-			const img = new Image();
-			img.src = bgUrl;
-			img.decode?.().then(() => {
-				document.body.style.background = `url('${bgUrl}') center/cover no-repeat fixed`;
-				document.body.style.zIndex = '0';
-			});
+			if (window.location.pathname !== '/projects') {
+				const wp_count = 6;
+				const now = new Date();
+				const index = Math.floor(now.getMinutes()) % wp_count;
+				const bgUrl = `/wp/win7-${index + 1}.jpg`;
+
+				const img = new Image();
+				img.src = bgUrl;
+				img.decode?.().then(() => {
+					document.body.style.background = `url('${bgUrl}') center/cover no-repeat fixed`;
+					document.body.style.zIndex = '0';
+				});
+			}
 		</script>
 
 		<link href="/bootstrap-5.3.8-dist/css/bootstrap.min.css" rel="stylesheet">
     	<link href="/7.css" rel="stylesheet">
 		<link href="/styles.css" rel="stylesheet">
 
-		
 	</head>
 	<body data-sveltekit-preload-data="hover">
 		<div style="display: contents">%sveltekit.body%</div>

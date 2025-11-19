@@ -2,6 +2,8 @@
 	import Wallpapers from "$lib/wallpapers.svelte";
 	import { browser } from "$app/environment";
 
+	import { page } from "$app/stores";
+
 	let isMobile = false;
 
 	if (browser) {
@@ -10,6 +12,10 @@
 </script>
 
 <!-- Фон всегда за контентом -->
+
+{#if $page.url.pathname === '/projects'}
+	<slot></slot>
+{:else}
 <div class="layout-root">
 	<Wallpapers />
 
@@ -18,6 +24,7 @@
 		<slot {isMobile} />
 	</div>
 </div>
+{/if}
 
 <style>
 	.layout-root {

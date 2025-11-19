@@ -2,9 +2,11 @@
     import { mdConvert } from '$lib/md-convert.js';
     export let id = 0, isMobile = false, selectedProject = 'questbench';
     export let windowManipulate;
+    import {onMount, onDestroy} from 'svelte';
+    import { writable } from 'svelte/store';
 
     // language
-    import { t as trans, changeLanguage as changLangSrv, getPhrase, getLangCode, formatLocalizedDate } from '$lib/i18n.js';
+    import { t as trans, changeLanguage as changLangSrv, getPhrase, getLangCode, formatLocalizedDate, projects } from '$lib/i18n.js';
 
     $: t = $trans;
 
@@ -70,62 +72,21 @@
         {
             href: "https://ry0.ru/",
             tag: "Ry0"
+        },
+        {
+            href: "https://t.me/eversiege",
+            tag: "Eversiege"
+        },
+        {
+            href: "https://myslivets.com/",
+            tag: "Daniel Myslivets"
         }
     ]
 
     const lang_list = [
         {code: "ru", tag: "Russian"},
-        {code: "en", tag: "English"}
+        //{code: "en", tag: "English"}
     ]
-
-    const projects = [
-        {
-            category: "ovk",
-            icon: "..",
-            files: [
-                { name: "ovknative", status: "wip" },
-                { name: "ovkwinxp", status: "done" },
-                { name: "ovkcoinbot", status: "archived" }
-            ]
-        },
-        {
-            category: "dm",
-            icon: "..",
-            files: [
-                { name: "dm_infra", status: "done" },
-                { name: "dm_arg", status: "wip" },
-                { name: "dm_chan_tgbot", status: "done" }
-            ]
-        },
-        {
-            category: "translations",
-            icon: "..",
-            files: [
-                { name: "deltarunaru", status: "wip" },
-                { name: "gmsutml", status: "wip" },
-                { name: "wiilink", status: "archived" },
-                { name: "rhfever", status: "archived" }
-            ]
-        },
-        {
-            category: "other",
-            icon: "..",
-            files: [
-                { name: "ld58", status: "done" },
-                { name: "infra", status: "done" },
-                { name: "pokedex", status: "archived" }
-            ]
-        },
-        {
-            category: "unfinished",
-            icon: "..",
-            files: [
-                { name: "questbench", status: "archived" },
-                { name: "dubpanel", status: "archived" },
-                { name: "mindwave", status: "wip" }
-            ]
-        }
-    ];
     
     let opened_categories = [];
 
@@ -137,7 +98,7 @@
         }
     };
 
-    let projects_updated_at = "09.11.2025"
+    let projects_updated_at = "19.11.2025"
 
     let selected_browser_style = 'sans'
     let browser_fs = 16
@@ -162,6 +123,8 @@
 
     let md_address_string = `/lang/${getLangCode()}/${selectedProject}.md`;
 
+    
+
     function openFileSelector() {
         mdFileInput.click();
     }
@@ -181,6 +144,31 @@
         customMdHTML = "";
         md_address_string = `/lang/${getLangCode()}/${selectedProject}.md`;
     }
+
+    let timeString = '';
+    let timer;
+
+    function updateTime() {
+		const now = new Date();
+		const hh = now.getHours();
+		const mm = String(now.getMinutes()).padStart(2, '0');
+		const ss = String(now.getSeconds()).padStart(2, '0');
+
+        const day = String(now.getDate()).padStart(2, '0');
+		const month = String(now.getMonth() + 1).padStart(2, '0'); // Месяцы с 0
+		const year = now.getFullYear();
+
+		timeString = `${hh}:${mm}:${ss} (${year}.${month}.${day})`;
+	}
+
+	onMount(() => {
+		updateTime(); // сразу отображаем время
+		timer = setInterval(updateTime, 1000); // обновляем каждую секунду
+	});
+
+	onDestroy(() => {
+		clearInterval(timer);
+	});
 
 </script>
 
@@ -240,6 +228,7 @@
         flex: 1;
         padding-top: 10px;
         padding-left: 20px;
+        padding-right: 10px;
         overflow-y: auto;
     }
 
@@ -261,6 +250,10 @@
 
     .about-md {
         font-size: 16px;
+    }
+
+    :global(b), :global(strong) {
+        font-weight: 500;
     }
 
     .ab-r-bottom {
@@ -550,6 +543,17 @@
         border-top: 3px solid transparent;
         border-bottom: 3px solid transparent;
     }
+
+    .about-page {
+        width: 100%;
+        height: 100%;
+        padding: 0;
+    }
+
+    .about-page img {
+        width: 100%;
+        height: auto;
+    }
 </style>
 
 <div class="body-style">
@@ -566,7 +570,7 @@
             <div class="about-title">
                 <h1>ZAZiOs <span class="age">{t('about.age', getAge())}</span></h1>
             </div>
-            <div class="about-phrase">{$getPhrase()}</div>
+            <div class="about-phrase">{t('timenow')} {timeString}</div>
             <div class="about-md">
                 {@html t(`md.about`)}
             </div>
@@ -670,8 +674,8 @@
             <li role="menuitem" tabindex="0" aria-haspopup="true">
                 {t('projects.menu.help')}
               <ul role="menu">
-                <li role="menuitem"><a href="#menubar" on:click={() => windowManipulate.openWindow(5)}>{t('projects.menu.change_lang')}</a></li>
-                <li role="menuitem"><a href="#menubar" on:click={() => windowManipulate.openWindow(10)}>{t('projects.menu.about')}</a></li>
+                <li role="menuitem"><a href="#lang" on:click={() => windowManipulate.openWindow(5)}>{t('projects.menu.change_lang')}</a></li>
+                <li role="menuitem"><a href="#about" on:click={() => windowManipulate.openWindow(10)}>{t('projects.menu.about')}</a></li>
               </ul>
             </li>
           </ul>
@@ -681,12 +685,14 @@
         <input type="text" class="md-address" placeholder=".md address" value='/' disabled/>
         {/if}
         <style>
-            .browser .md h1 { font-size: calc(var(--fsize) + 28px); }
-            .browser .md h2 { font-size: calc(var(--fsize) + 22px); }
-            .browser .md h3 { font-size: calc(var(--fsize) + 17px); }
-            .browser .md h4 { font-size: calc(var(--fsize) + 13px); }
-            .browser .md h5 { font-size: calc(var(--fsize) + 9px); }
-            .browser .md h6 { font-size: calc(var(--fsize) + 6px); }
+            .browser .md h1 { font-size: calc(var(--fsize) + 24px); }
+            .browser .md h2 { font-size: calc(var(--fsize) + 18px); }
+            .browser .md h3 { font-size: calc(var(--fsize) + 13px); }
+            .browser .md h4 { font-size: calc(var(--fsize) + 9px); }
+            .browser .md h5 { font-size: calc(var(--fsize) + 5px); }
+            .browser .md h6 { font-size: calc(var(--fsize) + 2px); }
+            .browser .md img { border-radius: 3px; max-width: 100%; max-height: 100%; }
+            .browser .md code { background-color: rgba(0,0,0,.05); padding: 2px 4px; border-radius: 4px; font-family: 'JetBrains Mono', 'Fira Code', Consolas, monospace; color: #111}
         </style>
         <div class="md {selected_browser_style} has-scrollbar" style="--fsize: {browser_fs}px; font-size: {browser_fs}px">
             {#if customMdHTML !== ""}
@@ -728,7 +734,11 @@
     </div>
 {:else if id === 10}
 
-О программе
+<div class="about-page has-scrollbar">
+
+    <img src="/about.png" alt="about">
+
+</div>
 
 {:else if id === 11}
 <div class="lang-notice">
