@@ -1,0 +1,72 @@
+{
+    "language": "Русский",
+    "language_international": "Russian",
+    "win": {
+        "2": "Обо мне",
+        "1": "Мои проекты",
+        "4": "Мои друзья",
+        "5": "Справка",
+        "10": "О программе",
+        "11": "Заметка"
+    },
+    "timenow": "Время в моём часовом поясе: ",
+    "chooseLang": "Выберите язык:",
+    "projects": {
+        "updated_at": "Обновлено %1s",
+        "sel": {
+            "title": "Проекты.",
+            
+            "ovk": "OpenVK",
+            "ovknative": "OpenVK Native",
+            "ovkwinxp": "WinXP Theme",
+            "ovkcoinbot": "OVK Coin Bot (TG)",
+            
+            "dm": "Мысливец",
+            "dm_infra": "Инфраструктура",
+            "dm_arg": "ARG",
+            "dm_chan_tgbot": "Бот вахтёр для телеграм",
+            
+            "translations": "Переводы",
+            "deltarunaru": "Deltaruna.ru",
+            "gmsutml": "GMS-UTML-Patcher",
+            "wiilink": "WiiLink",
+            "rhfever": "Rhythm Heaven Fever",
+            
+            "other": "Прочее",
+            "ld58": "LD58: Seal the Deal",
+            "infra": "Моя инфраструктура",
+            "pokedex": "pokedex bot (TG)",
+
+            "unfinished": "Незавершённые",
+            "questbench": "Кверстак",
+            "dubpanel": "DubPanel",
+            "mindwave": "Перевод на Mindwave"
+        },
+        "no_project_selected": "<h4>Проект не выбран.</h4><p>Выберите проект в окне «%1s»</p>",
+        "win_prefix": "Инспектор проектов: %1s",
+        "win_unselected": "Инспектор проектов",
+        "unknown_project": "Неизвестный проект",
+        "info": "Здесь будут отображаться мои проекты",
+        "menu": {
+            "file": "Файл",
+            "open": "Открыть",
+            "save": "Сохранить файл .md",
+            "exit": "Выход",
+            "view": "Вид",
+            "zoom": "Масштаб",
+            "zoom_in": "Увеличить",
+            "zoom_out": "Уменьшить",
+            "style": "Стиль",
+            "help": "Справка",
+            "change_lang": "Сменить язык",
+            "about": "О программе"
+        }
+    },
+    "notice": "Вы в любой момент можете сменить язык в меню инспектора проектов:",
+    "about": {
+        "age": "%1s лет."
+    },
+    "friends": {
+        "info": "Сайтики моих друзей"
+    }
+}

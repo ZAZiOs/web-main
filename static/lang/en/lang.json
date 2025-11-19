@@ -1,0 +1,71 @@
+{
+    "language": "English",
+    "language_international": "English",
+    "win": {
+        "2": "About Me",
+        "1": "My Projects",
+        "4": "My Friends",
+        "5": "Help",
+        "10": "About",
+        "11": "Note"
+    },
+    "chooseLang": "Choose a language:",
+    "projects": {
+        "updated_at": "Updated on %1s",
+        "sel": {
+            "title": "Projects.",
+            
+            "ovk": "OpenVK",
+            "ovknative": "OpenVK Native",
+            "ovkwinxp": "WinXP Theme",
+            "ovkcoinbot": "OVK Coin Bot (TG)",
+            
+            "dm": "Myslivets",
+            "dm_infra": "Infrastructure",
+            "dm_arg": "ARG",
+            "dm_chan_tgbot": "Telegram Comment-watcher Bot",
+            
+            "translations": "Translations",
+            "deltarunaru": "Deltaruna.ru",
+            "gmsutml": "GMS-UTML-Patcher",
+            "wiilink": "WiiLink",
+            "rhfever": "Rhythm Heaven Fever",
+            
+            "other": "Other",
+            "ld58": "LD58: Seal the Deal",
+            "infra": "My Infrastructure",
+            "pokedex": "Pokedex Bot (TG)",
+
+            "unfinished": "Unfinished",
+            "questbench": "Questbench",
+            "dubpanel": "DubPanel",
+            "mindwave": "Translation for Mindwave"
+        },
+        "no_project_selected": "<h4>No project selected.</h4><p>Select a project in the “%1s” window</p>",
+        "win_prefix": "Project Inspector: %1s",
+        "win_unselected": "Project Inspector",
+        "unknown_project": "Unknown project",
+        "info": "Here my projects will be displayed",
+        "menu": {
+            "file": "File",
+            "open": "Open",
+            "save": "Save as .md",
+            "exit": "Exit",
+            "view": "View",
+            "zoom": "Zoom",
+            "zoom_in": "Zoom In",
+            "zoom_out": "Zoom Out",
+            "style": "Style",
+            "help": "Help",
+            "change_lang": "Change Language",
+            "about": "About"
+        }
+    },
+    "notice": "You can change the language at any time in the Project Inspector menu:",
+    "about": {
+        "age": "%1s years old."
+    },
+    "friends": {
+        "info": "Websites of my friends"
+    }
+}
