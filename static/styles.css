@@ -13,3 +13,7 @@ body {
 .justify-content-between {
     justify-content: space-between;
 }
+
+.title-bar-controls button[aria-label=Close] {
+    cursor: default !important;
+}

@@ -67,19 +67,43 @@
     const friend_links = [
         {
             href: "https://bento.me/sasik",
-            tag: "sasikqq"
+            tag: "Sasikqq"
         },
         {
             href: "https://ry0.ru/",
             tag: "Ry0"
         },
         {
-            href: "https://t.me/eversiege",
-            tag: "Eversiege"
+            href: "https://t.me/cozy_inn",
+            tag: "Cozy Inn"
         },
         {
             href: "https://myslivets.com/",
             tag: "Daniel Myslivets"
+        },
+        {
+            href: "https://t.me/eversiege",
+            tag: "Eversiege"
+        },
+        {
+            href: "https://kiffaknife.space",
+            tag: "Kiffa"
+        },
+        {
+            href: "https://fayzetwin.xyz",
+            tag: "Fayzetwin"
+        },
+        {
+            href: "https://cat8753.ru",
+            tag: "Muralmaks"
+        },
+        {
+            href: "https://veselcraft.ru/",
+            tag: "Veselcraft"
+        },
+        {
+            href: "https://lisikpng.com/",
+            tag: "TheFox"
         }
     ]
 
