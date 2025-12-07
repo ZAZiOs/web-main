@@ -28,6 +28,8 @@
 		"dompurify": "^3.3.0",
 		"markdown": "^0.5.0",
 		"marked": "^16.4.1",
+		"marked-highlight": "^2.2.3",
+		"prismjs": "^1.30.0",
 		"svelte-time": "^0.8.2"
 	}
 }

@@ -5,6 +5,7 @@
     import { cubicIn, cubicOut } from 'svelte/easing';
     import { onMount } from "svelte";
     import { t as trans, getLangCode } from '$lib/i18n.js';
+    import "prismjs/themes/prism-tomorrow.css"; 
     $: t = $trans;
 
     // --------- CUSTOM ANIMATIONS ---------
@@ -237,7 +238,7 @@
 
     // --------- GLOBAL FOR CONTENTS OF WINDOWS ---------
 
-    let selectedProject = '';
+    let selectedProject = 'dm_arg';
 
     const closeAllWindows = async (timeout = 100) => {
         await Promise.all(initWindows.map((win, i) =>

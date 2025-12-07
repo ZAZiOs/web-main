@@ -1,12 +1,42 @@
 // md-convert.js
 import { marked } from 'marked';
+import { markedHighlight } from "marked-highlight";
 import DOMPurify from 'dompurify';
+import Prism from 'prismjs'; // pre code highlighting
+
+
+import 'prismjs/components/prism-javascript.js';
+import 'prismjs/components/prism-yaml.js';
+import 'prismjs/components/prism-json.js';
 
 // Настраиваем marked (по желанию)
 marked.setOptions({
     breaks: true,
     gfm: true, 
     silent: true
+});
+
+marked.use(markedHighlight({
+    langPrefix: 'language-',
+    highlight(code, lang) {
+        if (lang && Prism.languages[lang]) {
+            return Prism.highlight(code, Prism.languages[lang], lang);
+        }
+        return code;
+    }
+}));
+
+marked.use({
+    renderer: {
+        codespan(token) {
+            return `<code>${token.text}</code>`;
+        },
+        code(token) {
+            const lang = token.lang || 'plaintext';
+            const langDisplay = token.lang ? token.lang : '';
+            return `<pre><span class="language-name">${langDisplay}</span><code class="language-${lang}">${token.text}</code></pre>`;
+        }
+    }
 });
 
 const purifyConfig = {

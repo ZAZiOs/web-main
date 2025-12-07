@@ -25,7 +25,7 @@ export const projects = [
       icon: "..",
       files: [
           { name: "dm_infra", status: "done" },
-          { name: "dm_arg", status: "wip" },
+          { name: "dm_arg", status: "done" },
           { name: "dm_chan_tgbot", status: "done" }
       ]
   },

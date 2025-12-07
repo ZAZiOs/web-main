@@ -67,7 +67,7 @@
     const friend_links = [
         {
             href: "https://bento.me/sasik",
-            tag: "Sasiqq"
+            tag: "sasikqq"
         },
         {
             href: "https://ry0.ru/",
@@ -98,7 +98,7 @@
         }
     };
 
-    let projects_updated_at = "19.11.2025"
+    let projects_updated_at = "07.12.2025"
 
     let selected_browser_style = 'sans'
     let browser_fs = 16
@@ -688,6 +688,7 @@
                     {t('projects.menu.open')}
                   </button>
                 </li-->
+                <li role="menuitem"><a href="/projects">{t('projects.menu.open_in_new_window')}</a></li>
                 <li role="menuitem">
                   <a href="/lang/{getLangCode()}/{selectedProject}.md"  target="_blank">
                     {t('projects.menu.save')}
@@ -746,8 +747,33 @@
             .browser .md h4 { font-size: calc(var(--fsize) + 9px); }
             .browser .md h5 { font-size: calc(var(--fsize) + 5px); }
             .browser .md h6 { font-size: calc(var(--fsize) + 2px); }
-            .browser .md img { border-radius: 3px; max-width: 100%; max-height: 100%; }
-            .browser .md code { background-color: rgba(0,0,0,.05); padding: 2px 4px; border-radius: 4px; font-family: 'JetBrains Mono', 'Fira Code', Consolas, monospace; color: #111}
+            .browser .md img { 
+                display: block;
+                border-radius: 3px; 
+                max-width: 100%; 
+                max-height: 50vH;
+                border: 2px dashed #666;
+                margin-bottom: 5px;
+            }
+            .browser .md code { background-color: #1e1e1e10; padding: 2px 4px; border-radius: 4px; font-family: 'JetBrains Mono', 'Fira Code', Consolas, monospace; color: #111}
+            .browser .md pre { 
+                background-color: #2d2d2d; 
+                border-radius: 6px; 
+                overflow: auto; 
+                width: 100%;
+                margin-left: 2px;
+                margin-bottom: 5px;
+                padding-bottom: 5px;
+            }
+            .browser .md pre .language-name {
+                display: block;
+                background-color: #1e1e1e;
+                color: #ccc;
+                padding: 4px 8px;
+                font-size: 12px;
+                margin-bottom: 5px;
+            }
+            .browser .md pre code { background-color: transparent; color: #f8f8f2; padding: 0px 10px;}
         </style>
         <div class="md {selected_browser_style} has-scrollbar" style="--fsize: {browser_fs}px; font-size: {browser_fs}px">
             {#if customMdHTML !== ""}
