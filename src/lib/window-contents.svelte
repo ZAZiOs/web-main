@@ -174,13 +174,18 @@
 
     function updateTime() {
 		const now = new Date();
-		const hh = now.getHours();
-		const mm = String(now.getMinutes()).padStart(2, '0');
-		const ss = String(now.getSeconds()).padStart(2, '0');
 
-        const day = String(now.getDate()).padStart(2, '0');
-		const month = String(now.getMonth() + 1).padStart(2, '0'); // Месяцы с 0
-		const year = now.getFullYear();
+        const utc = now.getTime() + (now.getTimezoneOffset() * 60000);
+        const timeOffset = 3 * 60 * 60 * 1000; // UTC+3
+        const timeUTC3 = new Date(utc + timeOffset);
+
+		const hh = timeUTC3.getHours();
+		const mm = String(timeUTC3.getMinutes()).padStart(2, '0');
+		const ss = String(timeUTC3.getSeconds()).padStart(2, '0');
+
+        const day = String(timeUTC3.getDate()).padStart(2, '0');
+		const month = String(timeUTC3.getMonth() + 1).padStart(2, '0'); // Месяцы с 0
+		const year = timeUTC3.getFullYear();
 
 		timeString = `${hh}:${mm}:${ss} (${year}.${month}.${day})`;
 	}
