@@ -47,7 +47,7 @@
             tag: "GitHub"
         },
         {
-            href: "https://t.me/zazio_subs",
+            href: "https://t.me/zazios_ch",
             tag: "Telegram"
         },
         {
