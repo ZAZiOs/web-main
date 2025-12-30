@@ -109,7 +109,7 @@
 
     const lang_list = [
         {code: "ru", tag: "Russian"},
-        //{code: "en", tag: "English"}
+        {code: "en", tag: "English"}
     ]
     
     let opened_categories = [];
@@ -328,6 +328,15 @@
         font-size: 18px;
         gap: 10px;
         display: flex;
+
+        overflow-x: auto;
+        overflow-y: hidden;
+        scrollbar-width: none;      /* Firefox */
+        -ms-overflow-style: none;
+    }
+
+    .ab-r-bottom::-webkit-scrollbar {
+        display: none;
     }
 
     .ab-r-bottom a {

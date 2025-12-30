@@ -7,11 +7,12 @@
         "4": "My Friends",
         "5": "Help",
         "10": "About",
-        "11": "Note"
+        "11": "Notepad"
     },
-    "chooseLang": "Choose a language:",
+    "timenow": "Time in my timezone: ",
+    "chooseLang": "Choose language:",
     "projects": {
-        "updated_at": "Updated on %1s",
+        "updated_at": "Updated %1s",
         "sel": {
             "title": "Projects.",
             
@@ -23,7 +24,7 @@
             "dm": "Myslivets",
             "dm_infra": "Infrastructure",
             "dm_arg": "ARG",
-            "dm_chan_tgbot": "Telegram Comment-watcher Bot",
+            "dm_chan_tgbot": "Watchdog Bot for Telegram",
             
             "translations": "Translations",
             "deltarunaru": "Deltaruna.ru",
@@ -34,22 +35,23 @@
             "other": "Other",
             "ld58": "LD58: Seal the Deal",
             "infra": "My Infrastructure",
-            "pokedex": "Pokedex Bot (TG)",
+            "pokedex": "pokedex bot (TG)",
 
             "unfinished": "Unfinished",
             "questbench": "Questbench",
             "dubpanel": "DubPanel",
-            "mindwave": "Translation for Mindwave"
+            "mindwave": "Mindwave Translation"
         },
-        "no_project_selected": "<h4>No project selected.</h4><p>Select a project in the “%1s” window</p>",
+        "no_project_selected": "<h4>No project selected.</h4><p>Select a project in the \"%1s\" window</p>",
         "win_prefix": "Project Inspector: %1s",
         "win_unselected": "Project Inspector",
         "unknown_project": "Unknown project",
-        "info": "Here my projects will be displayed",
+        "info": "My projects will be displayed here",
         "menu": {
             "file": "File",
             "open": "Open",
-            "save": "Save as .md",
+            "open_in_new_window": "Open in New Window",
+            "save": "Save .md File",
             "exit": "Exit",
             "view": "View",
             "zoom": "Zoom",
@@ -66,6 +68,6 @@
         "age": "%1s years old."
     },
     "friends": {
-        "info": "Websites of my friends"
+        "info": "My friends' websites"
     }
 }

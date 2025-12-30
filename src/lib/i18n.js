@@ -117,7 +117,7 @@ export async function changeLanguage(langcode, beforeset) {
 
 // Автоматически грузим язык при старте
 if (browser) {
-  changeLanguage('ru');
+  changeLanguage('en');
 }
 
 
